@@ -34,6 +34,7 @@ public class RestClient {
 		switch (authType) {
 		case BEARER_TOKEN:
 			request.header("Authorization", "Bearer " + ConfigManger.get("bearertoken"));
+//			request.header("Authorization", "Bearer " + "e424198cc7e42c0e5fb9e5bcbf90d727d30ffbf00a56ca1ccb683809817d8304");
 			break;
 
 		case OAUTH2:

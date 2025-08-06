@@ -22,16 +22,16 @@ public class GetUserTest extends BaseTest{
 	}
 	
 	
-	@Test(enabled=false)
+	@Test
 	public void getAllUsersWithQueryParamTest() {
 		Map<String, String> queryParams = Map.of("name", "Ashutosh", "Status", "Active"); 
 		Response response = restClient.get(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, queryParams, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertTrue(response.statusLine().contains("OK"));
 	}
 	
-	@Test(enabled=false)
+	@Test
 	public void getSingleUsersTest() {
-		String userId="8053360";
+		String userId="8053930";
 		Response response = restClient.get(BASE_URL_GOREST, GOREST_USERS_ENDPOINT+"/"+userId, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertTrue(response.statusLine().contains("OK"));
 		Assert.assertEquals(response.jsonPath().getString("id"), userId);

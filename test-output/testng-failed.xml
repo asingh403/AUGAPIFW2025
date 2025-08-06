@@ -5,7 +5,7 @@
     <classes>
       <class name="com.qa.api.gorest.tests.GetUserTest">
         <methods>
-          <include name="getAllUsersTest"/>
+          <include name="getSingleUsersTest"/>
           <include name="setup"/>
         </methods>
       </class> <!-- com.qa.api.gorest.tests.GetUserTest -->
