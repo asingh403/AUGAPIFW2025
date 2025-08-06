@@ -1,1 +1,16 @@
-/target/
+# Eclipse / IntelliJ
+.classpath
+.project
+.settings/
+
+# Maven
+target/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+*.png
+test-output/
+/
