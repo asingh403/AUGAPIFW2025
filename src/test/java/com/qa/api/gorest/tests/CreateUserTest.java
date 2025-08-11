@@ -28,25 +28,24 @@ public class CreateUserTest extends BaseTest{
 	
 	@Test()
 	public void createUserWithStringTest() {
+		String name = StringUtils.getRandomName();
 		String userJson = "{\n"
-				+ "\"name\": \"Anju M\",\n"
+				+ "\"name\": \"" + name + "\",\n"
 				+ "\"gender\": \"Female\",\n"
 				+ "\"email\": \"" + StringUtils.getRandomEmailId() + "\",\n"
 				+ "\"status\": \"Active\"\n"
 				+ "}";
 		User user = new User("Ashutosh", "ashu@test-labs.com", "Male", "Active");
 		Response response = restClient.post(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, userJson, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
-		Assert.assertEquals(response.jsonPath().getString("name"), "Anju M");
+		Assert.assertEquals(response.jsonPath().getString("name"), name);
 		Assert.assertNotNull(response.jsonPath().getString("id"));
 		
 	}
 	
-	
-	
 	@Test	
 	public void createUserWithJsonTest() throws IOException {
 		
-		String jsonContent = Files.readString(Paths.get("./src/test/resource/jsons/user.json"));
+		String jsonContent = Files.readString(Paths.get("./src/test/resources/jsons/user.json"));
 	    
 	    // Replace the static email with dynamic one
 	    String dynamicEmail = StringUtils.getRandomEmailId();

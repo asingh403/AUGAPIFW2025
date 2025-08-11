@@ -23,6 +23,7 @@ public class RestClient {
 	private ResponseSpecification responseSpec200 = expect().statusCode(200);
 	private ResponseSpecification responseSpec201 = expect().statusCode(201);
 	private ResponseSpecification responseSpec400 = expect().statusCode(400);
+	private ResponseSpecification responseSpec204 = expect().statusCode(204);
 	private ResponseSpecification responseSpec200or201 = expect().statusCode(anyOf(equalTo(200), equalTo(201)));
 	private ResponseSpecification responseSpec200or404 = expect().statusCode(anyOf(equalTo(200), equalTo(404)));
 
@@ -34,7 +35,6 @@ public class RestClient {
 		switch (authType) {
 		case BEARER_TOKEN:
 			request.header("Authorization", "Bearer " + ConfigManger.get("bearertoken"));
-//			request.header("Authorization", "Bearer " + "e424198cc7e42c0e5fb9e5bcbf90d727d30ffbf00a56ca1ccb683809817d8304");
 			break;
 
 		case OAUTH2:
@@ -100,6 +100,48 @@ public class RestClient {
 		applyParams(request, queryParams, pathParams);
 
 		Response response = request.body(body).post(endPoint).then().spec(responseSpec201).extract().response();
+
+		response.prettyPrint();
+
+		return response;
+
+	}
+	
+	public <T> Response put(String url, String endPoint, T body, Map<String, String> queryParams,
+			Map<String, String> pathParams, AuthType authType, ContentType contentType) {
+
+		RequestSpecification request = setupRequest(url, authType, contentType);
+		applyParams(request, queryParams, pathParams);
+
+		Response response = request.body(body).put(endPoint).then().spec(responseSpec200).extract().response();
+
+		response.prettyPrint();
+
+		return response;
+
+	}
+	
+	public <T> Response patch(String url, String endPoint, T body, Map<String, String> queryParams,
+			Map<String, String> pathParams, AuthType authType, ContentType contentType) {
+
+		RequestSpecification request = setupRequest(url, authType, contentType);
+		applyParams(request, queryParams, pathParams);
+
+		Response response = request.body(body).patch(endPoint).then().spec(responseSpec200).extract().response();
+
+		response.prettyPrint();
+
+		return response;
+
+	}
+	
+	public <T> Response delete(String url, String endPoint, T body, Map<String, String> queryParams,
+			Map<String, String> pathParams, AuthType authType, ContentType contentType) {
+
+		RequestSpecification request = setupRequest(url, authType, contentType);
+		applyParams(request, queryParams, pathParams);
+
+		Response response = request.delete(endPoint).then().spec(responseSpec204).extract().response();
 
 		response.prettyPrint();
 

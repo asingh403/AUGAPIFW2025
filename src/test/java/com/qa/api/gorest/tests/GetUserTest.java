@@ -1,14 +1,11 @@
 package com.qa.api.gorest.tests;
 
 import java.util.Map;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
 import com.qa.api.base.BaseTest;
 import com.qa.api.constants.AuthType;
 import com.qa.api.manager.ConfigManger;
-
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
