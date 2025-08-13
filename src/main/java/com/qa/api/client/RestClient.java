@@ -24,6 +24,7 @@ public class RestClient {
 	private ResponseSpecification responseSpec201 = expect().statusCode(201);
 	private ResponseSpecification responseSpec400 = expect().statusCode(400);
 	private ResponseSpecification responseSpec204 = expect().statusCode(204);
+	private ResponseSpecification responseSpec404 = expect().statusCode(404);
 	private ResponseSpecification responseSpec200or201 = expect().statusCode(anyOf(equalTo(200), equalTo(201)));
 	private ResponseSpecification responseSpec200or404 = expect().statusCode(anyOf(equalTo(200), equalTo(404)));
 
@@ -100,9 +101,7 @@ public class RestClient {
 		applyParams(request, queryParams, pathParams);
 
 		Response response = request.body(body).post(endPoint).then().spec(responseSpec201).extract().response();
-
 		response.prettyPrint();
-
 		return response;
 
 	}
@@ -114,9 +113,7 @@ public class RestClient {
 		applyParams(request, queryParams, pathParams);
 
 		Response response = request.body(body).put(endPoint).then().spec(responseSpec200).extract().response();
-
 		response.prettyPrint();
-
 		return response;
 
 	}
@@ -128,9 +125,7 @@ public class RestClient {
 		applyParams(request, queryParams, pathParams);
 
 		Response response = request.body(body).patch(endPoint).then().spec(responseSpec200).extract().response();
-
 		response.prettyPrint();
-
 		return response;
 
 	}
@@ -142,9 +137,7 @@ public class RestClient {
 		applyParams(request, queryParams, pathParams);
 
 		Response response = request.delete(endPoint).then().spec(responseSpec204).extract().response();
-
 		response.prettyPrint();
-
 		return response;
 
 	}
@@ -156,9 +149,7 @@ public class RestClient {
 		applyParams(request, queryParams, pathParams);
 
 		Response response = request.body(file).post(endPoint).then().spec(responseSpec201).extract().response();
-
 		response.prettyPrint();
-
 		return response;
 
 	}

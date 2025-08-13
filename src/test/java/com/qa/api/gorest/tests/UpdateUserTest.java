@@ -18,12 +18,50 @@ public class UpdateUserTest extends BaseTest {
 		String name = StringUtils.getRandomName();
 
 		User user = new User(name, StringUtils.getRandomEmailId(), "Female", "Active");
-		User.builder().name(name).email(StringUtils.getRandomEmailId()).status("active").gender("Female").build();
+		User.builder()
+			.name(name)
+			.email(StringUtils.getRandomEmailId())
+			.status("active")
+			.gender("Female")
+			.build();
 
-		Response response = restClient.post(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, user, null, null,
+		Response responsePost = restClient.post(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, user, null, null,
 				AuthType.BEARER_TOKEN, ContentType.JSON);
-		Assert.assertEquals(response.jsonPath().getString("name"), name);
-		Assert.assertNotNull(response.jsonPath().getString("id"));
+		Assert.assertEquals(responsePost.jsonPath().getString("name"), name);
+		Assert.assertNotNull(responsePost.jsonPath().getString("id"));
+		
+		//fetch the userId
+		String userId = responsePost.jsonPath().getString("id");
+		System.out.println("user id === " + userId + "\nuser name === "+ name);
+		
+		//2. Get call fetch the same user id
+		
+		Response responseGet = restClient.get(BASE_URL_GOREST, GOREST_USERS_ENDPOINT+"/"+userId, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Assert.assertTrue(responseGet.statusLine().contains("OK"));
+		Assert.assertEquals(responseGet.jsonPath().getString("id"), userId);
+		System.out.println("user id === " + userId + "\nuser name === "+ name);
+		
+		//3. Update the userId
+		String putName = StringUtils.getRandomName();
+		user.setName(putName);
+		user.setStatus("inactive");
+		
+		Response responsePut = restClient.put(BASE_URL_GOREST, GOREST_USERS_ENDPOINT+"/"+userId, user, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Assert.assertTrue(responsePut.statusLine().contains("OK"));
+		Assert.assertEquals(responsePut.jsonPath().getString("id"), userId);
+		Assert.assertTrue(responsePut.statusLine().contains("OK"));
+		Assert.assertEquals(responsePut.jsonPath().getString("name"), putName);
+		Assert.assertEquals(responsePut.jsonPath().getString("status"), "inactive");
+		
+		
+		//4. Get response after updating 
+		responseGet = restClient.get(BASE_URL_GOREST, GOREST_USERS_ENDPOINT+"/"+userId, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Assert.assertTrue(responseGet.statusLine().contains("OK"));
+		Assert.assertEquals(responseGet.jsonPath().getString("id"), userId);
+		Assert.assertEquals(responsePut.jsonPath().getString("name"), putName);
+		System.out.println("user id === " + userId + "\nuser name === "+ name);
+		
+		
 	}
 
 }

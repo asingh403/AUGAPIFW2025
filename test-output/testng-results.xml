@@ -2,20 +2,20 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-08-12T02:53:56 IST" name="Default suite" finished-at="2025-08-12T02:53:58 IST" duration-ms="2121">
+  <suite started-at="2025-08-14T02:32:08 IST" name="Default suite" finished-at="2025-08-14T02:32:12 IST" duration-ms="4425">
     <groups>
     </groups>
-    <test started-at="2025-08-12T02:53:56 IST" name="Default test" finished-at="2025-08-12T02:53:58 IST" duration-ms="2121">
-      <class name="com.qa.api.gorest.tests.UpdateUserTest">
-        <test-method is-config="true" signature="setup()[pri:0, instance:com.qa.api.gorest.tests.UpdateUserTest@3d680b5a]" started-at="2025-08-12T02:53:56 IST" name="setup" finished-at="2025-08-12T02:53:56 IST" duration-ms="254" status="PASS">
+    <test started-at="2025-08-14T02:32:08 IST" name="Default test" finished-at="2025-08-14T02:32:12 IST" duration-ms="4425">
+      <class name="com.qa.api.gorest.tests.DeleteUserTest">
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.qa.api.gorest.tests.DeleteUserTest@36c88a32]" started-at="2025-08-14T02:32:08 IST" name="setup" finished-at="2025-08-14T02:32:08 IST" duration-ms="222" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="updateUserTest()[pri:0, instance:com.qa.api.gorest.tests.UpdateUserTest@3d680b5a]" started-at="2025-08-12T02:53:56 IST" name="updateUserTest" finished-at="2025-08-12T02:53:58 IST" duration-ms="1853" status="PASS">
+        <test-method signature="deleteUserTest()[pri:0, instance:com.qa.api.gorest.tests.DeleteUserTest@36c88a32]" started-at="2025-08-14T02:32:08 IST" name="deleteUserTest" finished-at="2025-08-14T02:32:12 IST" duration-ms="4189" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- updateUserTest -->
-      </class> <!-- com.qa.api.gorest.tests.UpdateUserTest -->
+        </test-method> <!-- deleteUserTest -->
+      </class> <!-- com.qa.api.gorest.tests.DeleteUserTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
