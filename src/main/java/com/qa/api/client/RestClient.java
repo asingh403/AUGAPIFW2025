@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.equalTo;
 
 import java.io.File;
+import java.util.Base64;
 import java.util.Map;
 
 import com.qa.api.constants.AuthType;
@@ -43,7 +44,7 @@ public class RestClient {
 			break;
 
 		case BASIC_AUTH:
-			request.header("Authorization", "Basic " + "=== Basicauth token ===");
+			request.header("Authorization", "Basic " + generateTheBasicAuthToken());
 			break;
 
 		case API_KEY:
@@ -100,7 +101,7 @@ public class RestClient {
 		RequestSpecification request = setupRequest(url, authType, contentType);
 		applyParams(request, queryParams, pathParams);
 
-		Response response = request.body(body).post(endPoint).then().spec(responseSpec201).extract().response();
+		Response response = request.body(body).post(endPoint).then().spec(responseSpec200or201).extract().response();
 		response.prettyPrint();
 		return response;
 
@@ -152,5 +153,10 @@ public class RestClient {
 		response.prettyPrint();
 		return response;
 
+	}
+	
+	private String generateTheBasicAuthToken() {
+		String credentials = ConfigManger.get("basic_user_name")+":"+ConfigManger.get("basic_password");
+		return Base64.getEncoder().encodeToString(credentials.getBytes());
 	}
 }

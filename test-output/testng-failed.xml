@@ -3,12 +3,12 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.qa.api.gorest.tests.DeleteUserTest">
+      <class name="com.qa.api.basicauth.tests.BasicAuthTest">
         <methods>
-          <include name="deleteUserTest"/>
+          <include name="baseAuthTest"/>
           <include name="setup"/>
         </methods>
-      </class> <!-- com.qa.api.gorest.tests.DeleteUserTest -->
+      </class> <!-- com.qa.api.basicauth.tests.BasicAuthTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
