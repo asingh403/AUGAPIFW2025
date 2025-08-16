@@ -1,10 +1,8 @@
 package com.qa.api.gorest.tests;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import com.qa.api.base.BaseTest;
@@ -52,6 +50,12 @@ public class CreateUserTest extends BaseTest{
 		Response response = restClient.post(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, userJson, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.jsonPath().getString("name"), "Abhi p");
 		Assert.assertNotNull(response.jsonPath().getString("id"));
+		
+		
+		
+		System.out.println(User.class.getProtectionDomain().getCodeSource());
+	    java.util.Arrays.stream(User.class.getDeclaredConstructors()).forEach(System.out::println);
+
 	}
 
 }

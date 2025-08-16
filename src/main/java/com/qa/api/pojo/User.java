@@ -1,8 +1,6 @@
 package com.qa.api.pojo;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
