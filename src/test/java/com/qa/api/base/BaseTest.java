@@ -13,6 +13,7 @@ public class BaseTest {
 	protected final static String BASE_URL_CONTACT = "https://thinking-tester-contact-list.herokuapp.com";
 	protected final static String BASE_RESREQ_URL = "https://reqres.in";
 	protected final static String BASE_URL_BASIC_AUTH = "https://the-internet.herokuapp.com";
+	protected final static String BASE_URL_PRODUCTS = "https://fakestoreapi.com";
 
 	// ***** API End URL ****
 	protected final static String GOREST_USERS_ENDPOINT = "/public/v2/users";
@@ -20,7 +21,8 @@ public class BaseTest {
 	protected final static String CONTACTS_USERS_ENDPOINT = "/contacts";
 	protected final static String RESREQ_ENDPOINT = "api/users";
 	protected final static String BASE_AUTH_ENDPOINT = "/basic_auth";
-
+	protected final static String PRODUCTS_ENDPOINT = "/products";
+	
 	@BeforeTest
 	public void setup() {
 		restClient = new RestClient();

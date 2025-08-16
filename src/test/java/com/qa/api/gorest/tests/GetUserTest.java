@@ -11,10 +11,13 @@ import io.restassured.response.Response;
 
 public class GetUserTest extends BaseTest{
 	
+	private String userId;
 	@Test
 	public void getAllUsersTest() {
 		System.out.println("Bearer Token from Config: " + ConfigManger.get("token"));
 		Response response = restClient.get(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		userId = response.jsonPath().getString("id[0]");
+		System.out.println("userid found : "+ userId);
 		Assert.assertTrue(response.statusLine().contains("OK"));
 	}
 	
@@ -28,7 +31,6 @@ public class GetUserTest extends BaseTest{
 	
 	@Test
 	public void getSingleUsersTest() {
-		String userId="8053930";
 		Response response = restClient.get(BASE_URL_GOREST, GOREST_USERS_ENDPOINT+"/"+userId, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertTrue(response.statusLine().contains("OK"));
 		Assert.assertEquals(response.jsonPath().getString("id"), userId);

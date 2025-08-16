@@ -17,16 +17,16 @@ import io.restassured.response.Response;
 
 public class CreateUserTest extends BaseTest{
 	
-	@Test()
+	@Test
 	public void createUserTest() {
-		User user = new User("Ashutosh", StringUtils.getRandomEmailId(), "Male", "Active");
+		User user = new User(null, "Ashutosh", StringUtils.getRandomEmailId(), "Male", "Active");
 		Response response = restClient.post(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, user, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.jsonPath().getString("name"), "Ashutosh");
 		Assert.assertNotNull(response.jsonPath().getString("id"));
 		
 	}
 	
-	@Test()
+	@Test
 	public void createUserWithStringTest() {
 		String name = StringUtils.getRandomName();
 		String userJson = "{\n"
@@ -35,7 +35,6 @@ public class CreateUserTest extends BaseTest{
 				+ "\"email\": \"" + StringUtils.getRandomEmailId() + "\",\n"
 				+ "\"status\": \"Active\"\n"
 				+ "}";
-		User user = new User("Ashutosh", "ashu@test-labs.com", "Male", "Active");
 		Response response = restClient.post(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, userJson, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.jsonPath().getString("name"), name);
 		Assert.assertNotNull(response.jsonPath().getString("id"));
@@ -47,7 +46,6 @@ public class CreateUserTest extends BaseTest{
 		
 		String jsonContent = Files.readString(Paths.get("./src/test/resources/jsons/user.json"));
 	    
-	    // Replace the static email with dynamic one
 	    String dynamicEmail = StringUtils.getRandomEmailId();
 	    String userJson = jsonContent.replace("abhi.pk@test.com", dynamicEmail);
 		

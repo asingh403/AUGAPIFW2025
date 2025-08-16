@@ -17,7 +17,7 @@ public class UpdateUserTest extends BaseTest {
 	public void updateUserTest() {
 		String name = StringUtils.getRandomName();
 
-		User user = new User(name, StringUtils.getRandomEmailId(), "Female", "Active");
+		User user = new User(null, name, StringUtils.getRandomEmailId(), "Female", "Active");
 		User.builder()
 			.name(name)
 			.email(StringUtils.getRandomEmailId())
