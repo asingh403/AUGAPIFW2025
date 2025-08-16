@@ -33,9 +33,19 @@ Current layers: **Test Layer**, **Client Layer**, **Configuration & Constants**,
 ### 5. Utilities (Planned)
 - Logger utility  
 - Assertions utility  
-
+- Test data utilities  
+- Serialization helpers  
 ---
 
+### Future Possibilities (Exploratory)
+These are not committed features, but areas we may explore later:
+- Docker (containerized execution)  
+- CI/CD integration (Jenkins/GitHub Actions)  
+- Mockito (mocking for isolated tests)  
+- AWS hosting  
+- Kubernetes for scaling test runs  
+ 
+---
 ## Flow Summary
 1. `ConfigManager` loads configuration (keys, tokens, base URLs).  
 2. `BaseTest` initializes the `RestClient`.  
