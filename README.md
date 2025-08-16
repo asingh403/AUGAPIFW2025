@@ -55,7 +55,6 @@ Current layers: **Test Layer**, **Client Layer**, **Configuration & Constants**,
 ---
 
 ## Visual Diagram (WIP + Planned)
-
 ```mermaid
 graph TB
     %% Test Layer
@@ -115,8 +114,12 @@ graph TB
     BT --> L
     BT --> A
 ```
+   
 ## Roadmap
 - [ ] Add DeleteUserTest  
 - [ ] Add serialization/deserialization tests  
 - [ ] Implement Product & Contact POJOs  
-- [ ] Build Logger and Assertion utilities  
+- [ ] Build Logger and Assertion utilities
+
+_**Current status:** Modules marked "✅" are implemented. Others are pending implementation._
+ 
