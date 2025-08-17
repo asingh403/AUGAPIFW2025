@@ -34,7 +34,7 @@ public class AmadeusAPITest extends BaseTest {
 		ConfigManger.set("bearertoken", accessToken);
 	}
 
-	@Test
+	@Test(description = "Validate the flight destination api is able to give correct Https code")
 	public void shouldReturnValidHttpResponse() {
 	    Response res = makeFlightRequest("PAR", "200");
 	    Assert.assertEquals(res.getStatusCode(), 200);
@@ -46,7 +46,7 @@ public class AmadeusAPITest extends BaseTest {
 	 * We have max price limit is 200 but 
 	 * still it is able to fetch more than 200
 	 */
-	@Test
+	@Test(description = "Validate the max price contraint as per user fixed range")
 	public void shouldRespectMaxPriceConstraint() {
 	    String maxPriceParam = "200";
 	    Response res = makeFlightRequest("PAR", maxPriceParam);
@@ -73,7 +73,7 @@ public class AmadeusAPITest extends BaseTest {
 	    });
 	}
 
-	@Test
+	@Test(description = "Validate the max price contraint as per user fixed range")
 	public void shouldContainValidFlightData() {
 	    Response res = makeFlightRequest("PAR", "200");
 	    List<Map<String, Object>> flights = res.jsonPath().getList("data");
@@ -82,82 +82,7 @@ public class AmadeusAPITest extends BaseTest {
 	    flights.forEach(this::validateFlightStructure);
 	}
 	
-	@Test
-	public void shouldValidateMaxPriceBoundary() {
-	    Response res = makeFlightRequest("PAR", "1");
-	    List<Map<String, Object>> flights = res.jsonPath().getList("data");
-	    
-	    if (!flights.isEmpty()) {
-	        System.out.println("Flights returned for maxPrice=1:");
-	        flights.forEach(flight -> {
-	            BigDecimal price = extractPrice(flight);
-	            System.out.println("Price: " + price);
-	        });
-	    }
-	}
-	
-	/**
-	 * Test multiple price points to confirm bug pattern
-	 * Bug Identified
-	 */
-	@Test
-	public void shouldDocumentMaxPriceBugBehavior() {
-	    Map<String, String> testCases = Map.of(
-	        "1", "Very low price",
-	        "50", "Low price", 
-	        "200", "Medium price",
-	        "1000", "High price"
-	    );
-	    
-	    testCases.forEach((maxPrice, description) -> {
-	        Response res = makeFlightRequest("PAR", maxPrice);
-	        List<Map<String, Object>> flights = res.jsonPath().getList("data");
-	        
-	        BigDecimal actualMaxPrice = flights.stream()
-	            .map(this::extractPrice)
-	            .max(BigDecimal::compareTo)
-	            .orElse(BigDecimal.ZERO);
-	            
-	        System.out.println(String.format(
-	            "%s (maxPrice=%s): Actual max returned = %s", 
-	            description, maxPrice, actualMaxPrice
-	        ));
-	    });
-	}
-
-	/**
-	 * These below method are the Actions methods for this class
-	 * @param origin
-	 * @param maxPrice
-	 * @return Response
-	 * Will refactor these 2 methods in different class
-	 */
-	private Response makeFlightRequest(String origin, String maxPrice) {
-	    Map<String, String> queryParams = Map.of(
-	        "origin", origin,
-	        "maxPrice", maxPrice
-	    );
-	    
-	    return restClient.get(
-	        BASE_URL_AMADEUS_FLIGHT_DETAILS,
-	        AMADEUS_FLIGHT_DETAILS_ENDPOINT,
-	        queryParams,
-	        null,
-	        AuthType.BEARER_TOKEN,
-	        ContentType.ANY
-	    );
-	}
-
-	private void validateFlightStructure(Map<String, Object> flight) {
-	    Assert.assertNotNull(flight.get("origin"), "Missing origin");
-	    Assert.assertNotNull(flight.get("destination"), "Missing destination");
-	    
-	    Map<String, Object> links = (Map<String, Object>) flight.get("links");
-	    Assert.assertNotNull(links, "Missing links object");
-	    Assert.assertTrue(String.valueOf(links.get("flightDates")).startsWith("https://"));
-	    Assert.assertTrue(String.valueOf(links.get("flightOffers")).startsWith("https://"));
-	}
-	
+	@Test (description= "Validate the price object null from flight data")
 	private BigDecimal extractPrice(Map<String, Object> flight) {
 	    Objects.requireNonNull(flight, "Flight data cannot be null");
 	    
@@ -176,5 +101,77 @@ public class AmadeusAPITest extends BaseTest {
 	        Assert.fail("Invalid price format: " + totalPrice + " - " + e.getMessage());
 	        return null; // Never reached
 	    }
+	}
+
+	/**
+	 * These below method are the Actions methods for this class
+	 * @param origin
+	 * @param maxPrice
+	 * @return Response
+	 * Will refactor these 2 methods in different class
+	 */
+	public void shouldValidateMaxPriceBoundary() {
+	    Response res = makeFlightRequest("PAR", "1");
+	    List<Map<String, Object>> flights = res.jsonPath().getList("data");
+	    
+	    if (!flights.isEmpty()) {
+	        System.out.println("Flights returned for maxPrice=1:");
+	        flights.forEach(flight -> {
+	            BigDecimal price = extractPrice(flight);
+	            System.out.println("Price: " + price);
+	        });
+	    }
+	}
+	
+	private void validateFlightStructure(Map<String, Object> flight) {
+	    Assert.assertNotNull(flight.get("origin"), "Missing origin");
+	    Assert.assertNotNull(flight.get("destination"), "Missing destination");
+	    
+	    Map<String, Object> links = (Map<String, Object>) flight.get("links");
+	    Assert.assertNotNull(links, "Missing links object");
+	    Assert.assertTrue(String.valueOf(links.get("flightDates")).startsWith("https://"));
+	    Assert.assertTrue(String.valueOf(links.get("flightOffers")).startsWith("https://"));
+	}
+	
+	/**
+	 * low to high ticket range constraint set by customer from $1 to $1000 to get the budget range set by endpoint
+	 * Test multiple price points to confirm bug pattern
+	 * Bug Identified
+	 */
+	public void shouldDocumentMaxPriceBugBehavior() {
+	    Map<String, String> testCases = Map.of(
+	        "1", "Very low price",
+	        "50", "Low price", 
+	        "200", "Medium price",
+	        "1000", "High price"
+	    );
+	    
+	    testCases.forEach((maxPrice, description) -> {
+	        Response res = makeFlightRequest("PAR", maxPrice);
+	        List<Map<String, Object>> flights = res.jsonPath().getList("data");
+	        
+	        BigDecimal actualMaxPrice = flights.stream()
+	            .map(this::extractPrice)
+	            .max(BigDecimal::compareTo)
+	            .orElse(BigDecimal.ZERO);
+	            
+	        System.out.println(String.format("%s (maxPrice=%s): Actual max returned = %s",description, maxPrice, actualMaxPrice));
+	    });
+	}
+	
+	private Response makeFlightRequest(String origin, String maxPrice) {
+	    Map<String, String> queryParams = Map.of(
+	        "origin", origin,
+	        "maxPrice", maxPrice
+	    );
+	    
+	    return restClient.get(
+	        BASE_URL_AMADEUS_FLIGHT_DETAILS,
+	        AMADEUS_FLIGHT_DETAILS_ENDPOINT,
+	        queryParams,
+	        null,
+	        AuthType.BEARER_TOKEN,
+	        ContentType.ANY
+	    );
 	}
 }
