@@ -1,42 +1,33 @@
 # API Test Automation Framework (WIP)
-
 ⚠️ **Status**: This framework is still under development. Features and documentation may change.
-
 ---
-
 ## Overview
 This framework is designed to test RESTful APIs with a modular layered architecture.  
-Current layers: **Test Layer**, **Client Layer**, **Configuration & Constants**, **Data Layer**, and **Utilities** (planned).
-
+<!-- Current layers: **Test Layer**, **Client Layer**, **Configuration & Constants**, **Data Layer**, and **Utilities**. -->
+- **Current layers:** Test Layer, Client Layer, Configuration & Constants, Data Layer, and Utilities.
 ---
-
 ## Architecture
-
 ### 1. Test Layer
 - **BaseTest** (setup)  
 - **GetUserTest**, **CreateUserTest**, **UpdateUserTest**  
 - More tests *planned*: DeleteUserTest, Serialization tests, Contacts API, etc.
-
 ### 2. Client Layer
 - **RestClient** for HTTP methods (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`)  
 - Handles auth, request/response specs, query/path params  
-
 ### 3. Configuration
 - **ConfigManager** loads properties dynamically  
 - **config.properties** stores tokens, credentials, base URLs  
-- *Planned*: `AuthType Enum`, `ContentType Enum`
-
+- **AuthType Enum** ✅
+- **ContentType Enum** ✅
 ### 4. Data Layer
 - **User POJO**  
 - *Planned*: Product POJO, Contact POJO, Serialization/Deserialization with Jackson
-
-### 5. Utilities (Planned)
-- Logger utility  
-- Assertions utility  
-- Test data utilities  
-- Serialization helpers  
+### 5. Utilities
+- **Logger utility** ✅
+- *Planned*: Assertions utility  
+- *Planned*: Test data utilities  
+- *Planned*: Serialization helpers  
 ---
-
 ### Future Possibilities (Exploratory)
 These are not committed features, but areas we may explore later:
 - Docker (containerized execution)  
@@ -52,18 +43,23 @@ These are not committed features, but areas we may explore later:
 3. `RestClient` executes HTTP requests.  
 4. Responses map into POJOs.  
 5. Tests run assertions (utilities planned).  
-
+6. `Logger` records test execution details, errors, and API responses.
 ---
-
 ## Tech Stack
 - Java 17  
 - RestAssured  
 - Jackson  
 - TestNG / JUnit  
 - Maven / Gradle  
-
+- Log4j / SLF4J
 ---
-
+## Logging Features
+- **Test execution logging**: Records start/end of test execution
+- **Request/Response logging**: Captures API request details and response bodies
+- **Error logging**: Detailed error capture with stack traces
+- **Configuration**: Configurable log levels (DEBUG, INFO, ERROR)
+- **Output formats**: Console and file output with rolling file policy
+---
 ## Visual Diagram (WIP + Planned)
 ```mermaid
 graph TB
@@ -73,44 +69,39 @@ graph TB
         GUT[GetUserTest ✅]
         CUT[CreateUserTest ✅]
         UUT[UpdateUserTest ✅]
-        DUT[DeleteUserTest *planned*]
-        GST[GetAUserWithSerializationTest *planned*]
-        CAT[ContactsAPITest *planned*]
-        BAT[BasicAuthTest *planned*]
-        PAT[ProductAPITest *planned*]
-        RRT[ReqResTest *planned*]
+        DUT[DeleteUserTest ✅]
+        GST[GetAUserWithSerializationTest ✅]
+        CAT[ContactsAPITest ✅]
+        BAT[BasicAuthTest ✅]
+        PAT[ProductAPITest ✅]
+        RRT[ReqResTest ✅]
     end
-
     %% Client Layer
     subgraph "Client Layer"
         RC[RestClient ✅]
     end
-
     %% Configuration
     subgraph "Configuration"
         CM[ConfigManager ✅]
         CP[config.properties ✅]
         
         subgraph "Constants"
-            AT[AuthType Enum *planned*]
-            CT[ContentType Enum *planned*]
+            AT[AuthType Enum ✅]
+            CT[ContentType Enum ✅]
         end
     end
-
     %% Data Layer
     subgraph "Data Layer"
         U[User POJO ✅]
-        P[Product POJO *planned*]
-        C[Contact POJO *planned*]
-        SD[Serialization/Deserialization *planned*]
+        P[Product POJO ✅]
+        C[Contact POJO ✅]
+        SD[Serialization/Deserialization ✅]
     end
-
     %% Utilities
     subgraph "Utilities"
-        L[Logger Utility *planned*]
+        L[Logger Utility ✅]
         A[Assertions Utility *planned*]
     end
-
     %% Relations
     BT --> RC
     RC --> CM
@@ -123,13 +114,13 @@ graph TB
     RC --> SD
     BT --> L
     BT --> A
+    RC --> L
 ```
    
 ## Roadmap
-- [ ] Add DeleteUserTest  
-- [ ] Add serialization/deserialization tests  
-- [ ] Implement Product & Contact POJOs  
-- [ ] Build Logger and Assertion utilities
-
-_**Current status:** Modules marked "✅" are implemented. Others are pending implementation._
- 
+- [x] Implement Logger utility
+- [x] Add DeleteUserTest
+- [x] Add serialization/deserialization tests
+- [x] Implement Product & Contact POJOs
+- [ ] Build Assertion utilities 
+***Current status:**** Modules marked "✅" are implemented. Others are pending implementation.*
