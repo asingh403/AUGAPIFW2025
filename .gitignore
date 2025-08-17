@@ -280,3 +280,6 @@ reports/
 # Local configuration overrides
 local.properties
 local-config/
+
+# secrets
+**/config.properties
