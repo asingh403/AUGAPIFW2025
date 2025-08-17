@@ -61,7 +61,6 @@
 			<version>2.20.0</version>
 		</dependency>
 
-		<!-- Log4j2 API -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>

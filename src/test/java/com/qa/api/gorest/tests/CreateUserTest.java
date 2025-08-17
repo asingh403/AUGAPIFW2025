@@ -53,7 +53,7 @@ public class CreateUserTest extends BaseTest{
 		
 		
 		
-		System.out.println(User.class.getProtectionDomain().getCodeSource());
+		log.info(User.class.getProtectionDomain().getCodeSource());
 	    java.util.Arrays.stream(User.class.getDeclaredConstructors()).forEach(System.out::println);
 
 	}
