@@ -39,10 +39,6 @@ public class RestClient {
 			request.header("Authorization", "Bearer " + ConfigManger.get("bearertoken"));
 			break;
 
-		case OAUTH2:
-			request.header("Authorization", "Bearer " + "oauth2 token");
-			break;
-
 		case BASIC_AUTH:
 			request.header("Authorization", "Basic " + generateTheBasicAuthToken());
 			break;
@@ -106,7 +102,23 @@ public class RestClient {
 		return response;
 
 	}
-	
+
+	public Response post(String baseUrl, String endPoint, String clientId, String clientSecret, String grantType,ContentType contentType) {
+		
+		Response response = RestAssured.given()
+				   .contentType(contentType)
+				   .formParam("grant_type", grantType)
+				   .formParam("client_id", clientId )
+				   .formParam("client_secret", clientSecret)
+				   .when()
+				   		.post(baseUrl+endPoint);
+		
+		response.asPrettyString();
+		return response;
+		
+
+	}
+
 	public <T> Response put(String url, String endPoint, T body, Map<String, String> queryParams,
 			Map<String, String> pathParams, AuthType authType, ContentType contentType) {
 
@@ -118,7 +130,7 @@ public class RestClient {
 		return response;
 
 	}
-	
+
 	public <T> Response patch(String url, String endPoint, T body, Map<String, String> queryParams,
 			Map<String, String> pathParams, AuthType authType, ContentType contentType) {
 
@@ -130,7 +142,7 @@ public class RestClient {
 		return response;
 
 	}
-	
+
 	public <T> Response delete(String url, String endPoint, T body, Map<String, String> queryParams,
 			Map<String, String> pathParams, AuthType authType, ContentType contentType) {
 
@@ -142,7 +154,7 @@ public class RestClient {
 		return response;
 
 	}
-	
+
 	public Response post(String url, String endPoint, File file, Map<String, String> queryParams,
 			Map<String, String> pathParams, AuthType authType, ContentType contentType) {
 
@@ -154,9 +166,9 @@ public class RestClient {
 		return response;
 
 	}
-	
+
 	private String generateTheBasicAuthToken() {
-		String credentials = ConfigManger.get("basic_user_name")+":"+ConfigManger.get("basic_password");
+		String credentials = ConfigManger.get("basic_user_name") + ":" + ConfigManger.get("basic_password");
 		return Base64.getEncoder().encodeToString(credentials.getBytes());
 	}
 }

@@ -5,12 +5,12 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigManger {
-	
+
 	private static Properties properties = new Properties();
-	
+
 	static {
 		InputStream input = ConfigManger.class.getClassLoader().getResourceAsStream("config/config.properties");
-		if(input != null) {
+		if (input != null) {
 			try {
 				properties.load(input);
 			} catch (IOException e) {
@@ -18,11 +18,11 @@ public class ConfigManger {
 			}
 		}
 	}
-	
+
 	public static String get(String key) {
-		return properties.getProperty(key);
+		return properties.getProperty(key).trim();
 	}
-	
+
 	public static void set(String key, String value) {
 		properties.setProperty(key, value);
 	}

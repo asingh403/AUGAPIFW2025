@@ -53,6 +53,7 @@ local.properties
 .factorypath
 .buildpath
 .target
+*.properties
 
 # External tool builders
 .externalToolBuilders/
