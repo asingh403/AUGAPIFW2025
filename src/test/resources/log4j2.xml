@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <!-- Colored Console Output -->
+        <Console name="ColoredConsole" target="SYSTEM_OUT">
+            <PatternLayout 
+                pattern="%d{HH:mm:ss.SSS} %highlight{%-5level}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=blue, DEBUG=green, TRACE=blue} %style{%logger{36}}{cyan} - %msg%n" 
+                disableAnsi="false"/>
+        </Console>
+        
+        <!-- Alternative Colored Pattern -->
+        <Console name="AlternativeConsole" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>%d{HH:mm:ss.SSS} [%t] %highlight{%-5level} %style{%logger{36}}{bright,cyan} - %style{%msg}{bright,white}%n</pattern>
+            </PatternLayout>
+        </Console>
+        
+        <!-- File Output (No Colors) -->
+        <File name="FileAppender" fileName="logs/test-automation.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+        
+        <!-- Rolling File -->
+        <RollingFile name="RollingFile" fileName="logs/api-tests.log" 
+                     filePattern="logs/api-tests-%i.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+    
+    <Loggers>
+        <!-- Your package logging with colored console -->
+        <Logger name="com.qa.api" level="DEBUG" additivity="false">
+            <AppenderRef ref="ColoredConsole"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+        
+        <!-- RestAssured logging -->
+        <Logger name="io.restassured" level="INFO" additivity="false">
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+        
+        <!-- TestNG logging -->
+        <Logger name="org.testng" level="INFO" additivity="false">
+            <AppenderRef ref="ColoredConsole"/>
+        </Logger>
+        
+        <!-- Root logger with colored output -->
+        <Root level="INFO">
+            <AppenderRef ref="ColoredConsole"/>
+            <AppenderRef ref="FileAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>

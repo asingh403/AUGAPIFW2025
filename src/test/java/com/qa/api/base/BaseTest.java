@@ -1,11 +1,14 @@
 package com.qa.api.base;
 
 import org.testng.annotations.BeforeTest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.qa.api.client.RestClient;
 
 public class BaseTest {
 
 	protected RestClient restClient;
+	protected static final Logger log = LogManager.getLogger();
 
 	
 	// ***** API Base URL ****
@@ -38,6 +41,6 @@ public class BaseTest {
 	@BeforeTest
 	public void setup() {
 		restClient = new RestClient();
-		System.out.println("RestClient initialized in @BeforeTest: " + restClient);
+		log.info("RestClient initialized in @BeforeTest: " + restClient);
 	}
 }

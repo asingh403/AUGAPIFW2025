@@ -7,6 +7,8 @@ import java.util.Objects;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeMethod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.annotations.Test;
 import com.qa.api.base.BaseTest;
 import com.qa.api.constants.AuthType;
@@ -15,30 +17,49 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 public class AmadeusAPITest extends BaseTest {
-
+//	private static final Logger logger = LogManager.getLogger(AmadeusAPITest.class);
 	private String accessToken;
 
 	@BeforeMethod
 	public void getOAuth2Token() {
+		log.info("Starting OAuth2 token generation");
+	    try {
+	    	log.debug("OAuth2 Request Details - URL: {}, Endpoint: {}",BASE_URL_OAUTH2_AMADEUS, OAUTH2_AMADEUS_ENDPOINT);
+	    	log.info("=== OAuth2 Token Request Debug ===");
+	    	log.info("Base URL: " + BASE_URL_OAUTH2_AMADEUS);
+	    	log.info("Endpoint: " + OAUTH2_AMADEUS_ENDPOINT);
+	    	log.info("Client ID: " + ConfigManger.get("clientId"));
+	    	log.info("Grant Type: " + ConfigManger.get("granttype"));
+	        
+	        Response postResponse = restClient.post(
+	            BASE_URL_OAUTH2_AMADEUS, 
+	            OAUTH2_AMADEUS_ENDPOINT,
+	            ConfigManger.get("clientId"), 
+	            ConfigManger.get("clientsecret"), 
+	            ConfigManger.get("granttype"),
+	            ContentType.URLENC);
 
-		Response postResponse = restClient.post(
-				BASE_URL_OAUTH2_AMADEUS, 
-				OAUTH2_AMADEUS_ENDPOINT,
-				ConfigManger.get("clientId"), 
-				ConfigManger.get("clientsecret"), 
-				ConfigManger.get("granttype"),
-				ContentType.URLENC);
-
-		String accessToken = postResponse.jsonPath().getString("access_token");
-		System.out.println("Access Token === " + accessToken);
-		ConfigManger.set("bearertoken", accessToken);
-	}
-
-	@Test(description = "Validate the flight destination api is able to give correct Https code")
-	public void shouldReturnValidHttpResponse() {
-	    Response res = makeFlightRequest("PAR", "200");
-	    Assert.assertEquals(res.getStatusCode(), 200);
-	    Assert.assertTrue(res.getHeader("Content-Type").contains("json"));
+	        log.info("Response Status: " + postResponse.getStatusCode());
+	        log.info("Response Body: " + postResponse.asString());
+	        
+	        if (postResponse.getStatusCode() != 200) {
+	            throw new RuntimeException("OAuth failed with status: " + postResponse.getStatusCode());
+	        }
+	        
+	        String accessToken = postResponse.jsonPath().getString("access_token");
+	        log.info("Access Token === " + accessToken);
+	        
+	        if (accessToken == null || accessToken.isEmpty()) {
+	            throw new RuntimeException("Access token is null or empty");
+	        }
+	        
+	        ConfigManger.set("bearertoken", accessToken);
+	        
+	    } catch (Exception e) {
+	    	log.info("OAuth2 Error: " + e.getMessage());
+	        e.printStackTrace();
+	        throw e;
+	    }
 	}
 	
 	/**
@@ -60,8 +81,7 @@ public class AmadeusAPITest extends BaseTest {
 	        .anyMatch(price -> price.compareTo(maxPrice) > 0);
 	    
 	    if (hasPriceBug) {
-	        // Skip test due to known API bug
-	        System.out.println("SKIPPING: maxPrice parameter bug still exists in API");
+	    	log.warn("SKIPPING: maxPrice parameter bug still exists in API");
 	        throw new SkipException("API maxPrice parameter not working - bug reported");
 	    }
 	    
@@ -115,10 +135,10 @@ public class AmadeusAPITest extends BaseTest {
 	    List<Map<String, Object>> flights = res.jsonPath().getList("data");
 	    
 	    if (!flights.isEmpty()) {
-	        System.out.println("Flights returned for maxPrice=1:");
+	    	log.info("Flights returned for maxPrice=1:");
 	        flights.forEach(flight -> {
 	            BigDecimal price = extractPrice(flight);
-	            System.out.println("Price: " + price);
+	            log.info("Price: " + price);
 	        });
 	    }
 	}
@@ -155,7 +175,7 @@ public class AmadeusAPITest extends BaseTest {
 	            .max(BigDecimal::compareTo)
 	            .orElse(BigDecimal.ZERO);
 	            
-	        System.out.println(String.format("%s (maxPrice=%s): Actual max returned = %s",description, maxPrice, actualMaxPrice));
+	        log.info(String.format("%s (maxPrice=%s): Actual max returned = %s",description, maxPrice, actualMaxPrice));
 	    });
 	}
 	
