@@ -60,7 +60,7 @@ public class BaseTest {
 	@AfterMethod
 	public void cleanup() throws InterruptedException {
 		testCount++;
-	    int delay = 2000 + (testCount * 500);
+	    int delay = 2000 + (testCount * 100);
 	    Thread.sleep(delay);
 	    System.out.println("Delay after test #" + testCount + ": " + delay + "ms");
 	}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="API Regression Suite" verbose="4" preserve-order="true" parallel="none">
+
+	<test name="GoRest API Tests">
+		<packages>
+			<package name="com.qa.api.gorest.tests" />
+		</packages>
+	</test>
+
+	<test name="Basic Auth Tests">
+		<packages>
+			<package name="com.qa.api.basicauth.tests" />
+		</packages>
+	</test>
+
+	<test name="Contacts Tests">
+		<packages>
+			<package name="com.qa.api.contacts.tests" />
+		</packages>
+	</test>
+
+	<test name="Products Tests">
+		<packages>
+			<package name="com.qa.api.products.tests" />
+		</packages>
+	</test>
+
+	<test name="API Schema Tests">
+		<packages>
+			<package name="com.qa.api.schema.tests" />
+		</packages>
+	</test>
+
+	<test name="API ReqRes Tests">
+		<packages>
+			<package name="com.qa.api.reqres.tests" />
+		</packages>
+	</test>
+
+	<test name="Amadeus API Tests">
+		<packages>
+			<package name="com.qa.api.amadeus.tests" />
+		</packages>
+	</test>
+
+</suite>

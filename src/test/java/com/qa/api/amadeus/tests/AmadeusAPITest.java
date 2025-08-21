@@ -24,6 +24,7 @@ public class AmadeusAPITest extends BaseTest {
 
 	@BeforeMethod
 	public void getOAuth2Token() {
+
 		log.info("Starting OAuth2 token generation");
 		try {
 			log.debug("OAuth2 Request Details - URL: {}, Endpoint: {}", BASE_URL_OAUTH2_AMADEUS,

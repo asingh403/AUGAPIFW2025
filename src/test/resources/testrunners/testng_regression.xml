@@ -1,4 +1,15 @@
-<suite name="GoRest Regression Suite">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="API Regression Test Suite" verbose="4">
+
+
+	<!-- 
+	<listeners>
+		 <listener class-name="com.aventstack.chaintest.plugins.ChainTestListener" /> 
+	</listeners>
+-->
+
 
 	<test name="Go Rest API Test - Get User">
 		<classes>
@@ -24,14 +35,36 @@
 		</classes>
 	</test>
 
-	<test name="Go Rest API Test - Schema">
+	<test name="Product API Test - Get Product">
 		<classes>
-			<class name="com.qa.api.schema.tests.GoRestUserAPISchemaTest">
-				<methods>
-					<exclude name="createUserAPISchemaTest" />
-				</methods>
-			</class>
+			<class name="com.qa.api.products.tests.ProductAPITest" />
 		</classes>
 	</test>
 
-</suite>
+	<test name="Product API Test - Get Product With Json Path">
+		<classes>
+			<class name="com.qa.api.products.tests.ProductAPITestWithJsonPath" />
+		</classes>
+	</test>
+
+	<test name="Schema Test">
+		<classes>
+			<class name="com.qa.api.schema.tests.GoRestUserAPISchemaTest" />
+		</classes>
+	</test>
+
+
+	<test name="Amadeus API Test">
+		<classes>
+			<class name="com.qa.api.amadeus.tests.AmadeusAPITest" />
+		</classes>
+	</test>
+
+	<test name="Basic Auth API Test">
+		<classes>
+			<class name="com.qa.api.basicauth.tests.BasicAuthTest" />
+		</classes>
+	</test>
+
+
+</suite>	
