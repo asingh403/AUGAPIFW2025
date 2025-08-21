@@ -74,6 +74,11 @@
 			<version>2.20.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-schema-validator</artifactId>
+			<version>5.5.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -87,6 +92,20 @@
 				<configuration>
 					<source>17</source>
 					<target>17</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M9</version>
+				<configuration>
+					<packages>com.qa.api</packages>
+					<parallel>methods</parallel>
+					<threadCount>5</threadCount>
+					<systemPropertyVariables>
+						<test.base.package>com.qa.api</test.base.package>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 		</plugins>

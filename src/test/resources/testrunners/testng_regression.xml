@@ -1,0 +1,37 @@
+<suite name="GoRest Regression Suite">
+
+	<test name="Go Rest API Test - Get User">
+		<classes>
+			<class name="com.qa.api.gorest.tests.GetUserTest" />
+		</classes>
+	</test>
+
+	<test name="Go Rest API Test - Create User">
+		<classes>
+			<class name="com.qa.api.gorest.tests.CreateUserTest" />
+		</classes>
+	</test>
+
+	<test name="Go Rest API Test - Update User">
+		<classes>
+			<class name="com.qa.api.gorest.tests.UpdateUserTest" />
+		</classes>
+	</test>
+
+	<test name="Go Rest API Test - Delete User">
+		<classes>
+			<class name="com.qa.api.gorest.tests.DeleteUserTest" />
+		</classes>
+	</test>
+
+	<test name="Go Rest API Test - Schema">
+		<classes>
+			<class name="com.qa.api.schema.tests.GoRestUserAPISchemaTest">
+				<methods>
+					<exclude name="createUserAPISchemaTest" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+
+</suite>

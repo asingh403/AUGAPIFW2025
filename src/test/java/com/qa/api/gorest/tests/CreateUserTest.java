@@ -14,6 +14,9 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 public class CreateUserTest extends BaseTest{
+	static {
+        System.out.println("=== CreateUserTest STATIC BLOCK EXECUTING ===");
+    }
 	
 	@Test
 	public void createUserTest() {

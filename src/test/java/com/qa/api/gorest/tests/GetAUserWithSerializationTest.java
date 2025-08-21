@@ -47,6 +47,7 @@ public class GetAUserWithSerializationTest extends BaseTest {
 		Assert.assertEquals(expectedEmailId, actualEmaillId);
 		Assert.assertTrue(responseGet.statusLine().contains("OK"));
 
+		
 		User userResponse = JsonUtils.deserialize(responseGet, User.class);
 
 		Assert.assertEquals(userResponse.getName(), user.getName());

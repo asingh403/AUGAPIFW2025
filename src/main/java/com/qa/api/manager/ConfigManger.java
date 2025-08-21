@@ -9,18 +9,24 @@ public class ConfigManger {
 	private static Properties properties = new Properties();
 
 	static {
-		InputStream input = ConfigManger.class.getClassLoader().getResourceAsStream("config/config.properties");
-		if (input != null) {
-			try {
-				properties.load(input);
-			} catch (IOException e) {
-				e.printStackTrace();
+		try {
+			InputStream input = Thread.currentThread().getContextClassLoader()
+					.getResourceAsStream("config/config.properties");
+			if (input == null) {
+				input = ConfigManger.class.getClassLoader().getResourceAsStream("config/config.properties");
 			}
+
+			if (input != null) {
+				properties.load(input);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
 	public static String get(String key) {
-		return properties.getProperty(key).trim();
+		String value = properties.getProperty(key);
+		return value != null ? value.trim() : null;
 	}
 
 	public static void set(String key, String value) {
