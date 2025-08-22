@@ -1,0 +1,59 @@
+/* Allure Custom Styling with MasterCard Logo */
+
+/* Add logo to header */
+.side-nav__brand:before,
+.app__header:before,
+.navbar-brand:before {
+    content: "";
+    background: url('logo.png') no-repeat;
+    background-size: contain;
+    width: 120px;
+    height: 50px;
+    display: inline-block;
+    margin-right: 15px;
+    vertical-align: middle;
+}
+
+/* Alternative approach - inject logo into main header */
+.app__header {
+    position: relative;
+    padding-left: 140px;
+}
+
+.app__header:before {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Style the main title */
+.app__header h1,
+.app__title {
+    color: #333;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+/* Custom header section */
+.custom-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.custom-header img {
+    width: 120px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.custom-header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+}

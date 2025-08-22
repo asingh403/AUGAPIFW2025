@@ -24,6 +24,7 @@ public class CreateUserTest extends BaseTest{
 		Response response = restClient.post(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, user, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.jsonPath().getString("name"), "Ashutosh");
 		Assert.assertNotNull(response.jsonPath().getString("id"));
+		LOG.info("Get userId : "+response.jsonPath().getString("id"));
 		
 	}
 	
@@ -56,7 +57,7 @@ public class CreateUserTest extends BaseTest{
 		
 		
 		
-		log.info(User.class.getProtectionDomain().getCodeSource());
+		LOG.info(User.class.getProtectionDomain().getCodeSource());
 	    java.util.Arrays.stream(User.class.getDeclaredConstructors()).forEach(System.out::println);
 
 	}

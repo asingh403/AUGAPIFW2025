@@ -3,15 +3,21 @@ package com.qa.api.base;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
 
 import com.qa.api.client.RestClient;
+
+import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.RestAssured;
+
+
 
 public class BaseTest {
 	
 	private static int testCount = 0;
 	protected RestClient restClient;
-	protected static final Logger log = LogManager.getLogger();
+	protected static final Logger LOG = LogManager.getLogger();
 
 	
 	// ***** API Base URL ****
@@ -35,24 +41,24 @@ public class BaseTest {
 	protected final static String BASE_AUTH_ENDPOINT = "/basic_auth";
 	protected final static String PRODUCTS_ENDPOINT = "/products";
 	protected final static String OAUTH2_AMADEUS_ENDPOINT = "/v1/security/oauth2/token";
-
-	
 	protected final static String AMADEUS_FLIGHT_DETAILS_ENDPOINT = "/v1/shopping/flight-destinations";
-	
 	protected final static String CIRCUIT_ENDPOINT="/ergast/f1/circuits/";
-
 	
 	
+	@BeforeSuite
+	public void setupAllureReport() {
+		RestAssured.filters(new AllureRestAssured());
+	}
 	
-	@BeforeClass
+	@BeforeTest
 	public void setup() throws InterruptedException {
 	    System.out.println("=== SETUP STARTING for: " + this.getClass().getSimpleName() + " ===");
 	    try {
 	        Thread.sleep(1000);
 	        restClient = new RestClient();
-	        log.info("=== SETUP SUCCESS for: " + this.getClass().getSimpleName() + " ===");
+	        LOG.info("=== SETUP SUCCESS for: " + this.getClass().getSimpleName() + " ===");
 	    } catch (Exception e) {
-	    	log.info("=== SETUP FAILED for: " + this.getClass().getSimpleName() + ": " + e.getMessage() + " ===");
+	    	LOG.info("=== SETUP FAILED for: " + this.getClass().getSimpleName() + ": " + e.getMessage() + " ===");
 	        throw e;
 	    }
 	}

@@ -15,10 +15,10 @@ public class GetUserTest extends BaseTest{
 	
 	@Test(priority = 1)
 	public void getAllUsersTest() {
-		log.info("Bearer Token from Config: " + ConfigManger.get("bearertoken"));
+		LOG.info("Bearer Token from Config: " + ConfigManger.get("bearertoken"));
 		Response response = restClient.get(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		userId = response.jsonPath().getString("id[0]");
-		log.info("userid found : "+ userId);
+		LOG.info("userid found : "+ userId);
 		Assert.assertTrue(response.statusLine().contains("OK"));
 	}
 	
@@ -32,7 +32,7 @@ public class GetUserTest extends BaseTest{
 	
 	@Test(priority = 2, dependsOnMethods = "getAllUsersTest")
 	public void getSingleUsersTest() {
-		log.info("=== Single user "+ BASE_URL_GOREST+GOREST_USERS_ENDPOINT+"/"+userId);
+		LOG.info("=== Single user "+ BASE_URL_GOREST+GOREST_USERS_ENDPOINT+"/"+userId);
 		Response response = restClient.get(BASE_URL_GOREST, GOREST_USERS_ENDPOINT+"/"+userId, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertTrue(response.statusLine().contains("OK"));
 		Assert.assertEquals(response.jsonPath().getString("id"), userId);

@@ -3,17 +3,25 @@
 
 <suite name="API Regression Suite" verbose="4" preserve-order="true" parallel="none">
 
+<!-- 	
+	<listeners>
+		<listener class-name="com.aventstack.chaintest.plugins.ChainTestListener" />
+	</listeners>
+-->
+
 	<test name="GoRest API Tests">
 		<packages>
 			<package name="com.qa.api.gorest.tests" />
 		</packages>
 	</test>
 
+
 	<test name="Basic Auth Tests">
 		<packages>
 			<package name="com.qa.api.basicauth.tests" />
 		</packages>
 	</test>
+
 
 	<test name="Contacts Tests">
 		<packages>
@@ -26,6 +34,7 @@
 			<package name="com.qa.api.products.tests" />
 		</packages>
 	</test>
+
 
 	<test name="API Schema Tests">
 		<packages>
@@ -44,5 +53,6 @@
 			<package name="com.qa.api.amadeus.tests" />
 		</packages>
 	</test>
+
 
 </suite>

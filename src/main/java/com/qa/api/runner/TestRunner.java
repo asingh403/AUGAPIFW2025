@@ -1,5 +1,7 @@
 package com.qa.api.runner;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.testng.TestNG;
 import java.io.File;
 import java.net.URL;
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
  * Executes TestNG XML files from testrunners directory with simplified API
  */
 public class TestRunner {
-
+	private static final Logger LOG = LogManager.getLogger(); 
 	private static final String TESTRUNNERS_PATH = "src/test/resources/testrunners";
 	private static final String DEFAULT_XML = "testng_e2e_regression.xml";
 
@@ -30,7 +32,7 @@ public class TestRunner {
 	public void execute(String xmlFile) {
 		initializeEnvironment();
 		executeTestSuite(xmlFile);
-		System.out.println("=== TestRunner Completed ===");
+		LOG.info("=== TestRunner Completed ===");
 	}
 
 	/**
@@ -48,11 +50,11 @@ public class TestRunner {
 	 * Execute all XML files in testrunners directory
 	 */
 	public void executeAllSuites() {
-		System.out.println("=== Executing All Test Suites ===");
+		LOG.info("=== Executing All Test Suites ===");
 
 		List<String> xmlFiles = findAllXmlFiles();
 		if (xmlFiles.isEmpty()) {
-			System.out.println("No XML files found in: " + TESTRUNNERS_PATH);
+			LOG.warn("No XML files found in: " + TESTRUNNERS_PATH);
 			return;
 		}
 
@@ -64,7 +66,7 @@ public class TestRunner {
 	 * Execute a specific XML file
 	 */
 	private void executeSingleSuite(String xmlFileName) {
-		System.out.println("=== Executing Test Suite: " + xmlFileName + " ===");
+		LOG.info("=== Executing Test Suite: " + xmlFileName + " ===");
 
 		String xmlPath = getXmlPath(xmlFileName);
 		if (!isValidXmlFile(xmlPath)) {
@@ -72,7 +74,7 @@ public class TestRunner {
 			return;
 		}
 
-		System.out.println("Found: " + xmlFileName);
+		LOG.info("Found: " + xmlFileName);
 		runTestNG(Arrays.asList(xmlPath));
 	}
 
@@ -101,7 +103,7 @@ public class TestRunner {
 			File mainClasses = new File("target/classes");
 
 			if (!testClasses.exists() || !mainClasses.exists()) {
-				System.out.println("WARNING: Compiled classes not found. Run 'mvn test-compile' first.");
+				LOG.warn("WARNING: Compiled classes not found. Run 'mvn test-compile' first.");
 				return;
 			}
 
@@ -109,9 +111,9 @@ public class TestRunner {
 			URLClassLoader classLoader = new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
 			Thread.currentThread().setContextClassLoader(classLoader);
 
-			System.out.println("Classpath configured for test execution");
+			LOG.info("Classpath configured for test execution");
 		} catch (Exception e) {
-			System.out.println("WARNING: Could not setup test classpath: " + e.getMessage());
+			LOG.error("WARNING: Could not setup test classpath: " + e.getMessage());
 		}
 	}
 
@@ -119,13 +121,13 @@ public class TestRunner {
 	 * Execute TestNG with provided XML files
 	 */
 	private void runTestNG(List<String> xmlFiles) {
-		System.out.println("\n=== Starting Test Execution ===");
+		LOG.info("\n=== Starting Test Execution ===");
 
 		TestNG testng = new TestNG();
 		testng.setTestSuites(xmlFiles);
 		testng.run();
 
-		System.out.println("\n=== Test Execution Completed ===");
+		LOG.info("\n=== Test Execution Completed ===");
 	}
 
 	/**
@@ -145,7 +147,7 @@ public class TestRunner {
 					.map(Path::toString).collect(Collectors.toList());
 
 		} catch (Exception e) {
-			System.out.println("ERROR: Could not scan testrunners directory: " + e.getMessage());
+			LOG.error("ERROR: Could not scan testrunners directory: " + e.getMessage());
 			return Arrays.asList();
 		}
 	}
@@ -168,8 +170,8 @@ public class TestRunner {
 	 * Handle invalid file scenario
 	 */
 	private void handleInvalidFile(String xmlFileName) {
-		System.out.println("ERROR: XML file not found: " + xmlFileName);
-		System.out.println("\nAvailable XML files:");
+		LOG.error("ERROR: XML file not found: " + xmlFileName);
+		LOG.info("\nAvailable XML files:");
 
 		findAllXmlFiles().stream().map(path -> Paths.get(path).getFileName().toString())
 				.forEach(name -> System.out.println("  - " + name));
@@ -179,7 +181,7 @@ public class TestRunner {
 	 * Log found XML files
 	 */
 	private void logFoundFiles(List<String> xmlFiles) {
-		System.out.println("Found " + xmlFiles.size() + " XML files:");
+		LOG.info("Found " + xmlFiles.size() + " XML files:");
 		xmlFiles.stream().map(path -> Paths.get(path).getFileName().toString())
 				.forEach(name -> System.out.println("  - " + name));
 	}

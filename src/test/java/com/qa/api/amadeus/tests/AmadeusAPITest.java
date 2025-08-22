@@ -25,29 +25,34 @@ public class AmadeusAPITest extends BaseTest {
 	@BeforeMethod
 	public void getOAuth2Token() {
 
-		log.info("Starting OAuth2 token generation");
+		LOG.info("Starting OAuth2 token generation");
 		try {
-			log.debug("OAuth2 Request Details - URL: {}, Endpoint: {}", BASE_URL_OAUTH2_AMADEUS,
+			LOG.debug("OAuth2 Request Details - URL: {}, Endpoint: {}", BASE_URL_OAUTH2_AMADEUS,
 					OAUTH2_AMADEUS_ENDPOINT);
-			log.info("=== OAuth2 Token Request Debug ===");
-			log.info("Base URL: " + BASE_URL_OAUTH2_AMADEUS);
-			log.info("Endpoint: " + OAUTH2_AMADEUS_ENDPOINT);
-			log.info("Client ID: " + ConfigManger.get("clientId"));
-			log.info("Grant Type: " + ConfigManger.get("granttype"));
+			LOG.info("=== OAuth2 Token Request Debug ===");
+			LOG.info("Base URL: " + BASE_URL_OAUTH2_AMADEUS);
+			LOG.info("Endpoint: " + OAUTH2_AMADEUS_ENDPOINT);
+			LOG.info("Client ID: " + ConfigManger.get("clientId"));
+			LOG.info("Grant Type: " + ConfigManger.get("granttype"));
 
-			Response postResponse = restClient.post(BASE_URL_OAUTH2_AMADEUS, OAUTH2_AMADEUS_ENDPOINT,
-					ConfigManger.get("clientId"), ConfigManger.get("clientsecret"), ConfigManger.get("granttype"),
-					ContentType.URLENC);
+			Response postResponse = restClient.post(
+					BASE_URL_OAUTH2_AMADEUS, 
+					OAUTH2_AMADEUS_ENDPOINT,
+					ConfigManger.get("clientId"),
+					ConfigManger.get("clientsecret"),
+					ConfigManger.get("granttype"),
+					ContentType.URLENC
+					);
 
-			log.info("Response Status: " + postResponse.getStatusCode());
-			log.info("Response Body: " + postResponse.asString());
+			LOG.info("Response Status: " + postResponse.getStatusCode());
+			LOG.info("Response Body: " + postResponse.asString());
 
 			if (postResponse.getStatusCode() != 200) {
 				throw new RuntimeException("OAuth failed with status: " + postResponse.getStatusCode());
 			}
 
 			String accessToken = postResponse.jsonPath().getString("access_token");
-			log.info("Access Token === " + accessToken);
+			LOG.info("Access Token === " + accessToken);
 
 			if (accessToken == null || accessToken.isEmpty()) {
 				throw new RuntimeException("Access token is null or empty");
@@ -56,7 +61,7 @@ public class AmadeusAPITest extends BaseTest {
 			ConfigManger.set("bearertoken", accessToken);
 
 		} catch (Exception e) {
-			log.info("OAuth2 Error: " + e.getMessage());
+			LOG.info("OAuth2 Error: " + e.getMessage());
 			e.printStackTrace();
 			throw e;
 		}
@@ -78,7 +83,7 @@ public class AmadeusAPITest extends BaseTest {
 		boolean hasPriceBug = flights.stream().map(this::extractPrice).anyMatch(price -> price.compareTo(maxPrice) > 0);
 
 		if (hasPriceBug) {
-			log.warn("SKIPPING: maxPrice parameter bug still exists in API");
+			LOG.warn("SKIPPING: maxPrice parameter bug still exists in API");
 			throw new SkipException("API maxPrice parameter not working - bug reported");
 		}
 
@@ -103,7 +108,6 @@ public class AmadeusAPITest extends BaseTest {
 
 	/**
 	 * These below method are the Actions methods for this class
-	 * 
 	 * @param origin
 	 * @param maxPrice
 	 * @return Response Will refactor these 2 methods in different class
@@ -113,10 +117,10 @@ public class AmadeusAPITest extends BaseTest {
 		List<Map<String, Object>> flights = res.jsonPath().getList("data");
 
 		if (!flights.isEmpty()) {
-			log.info("Flights returned for maxPrice=1:");
+			LOG.info("Flights returned for maxPrice=1:");
 			flights.forEach(flight -> {
 				BigDecimal price = extractPrice(flight);
-				log.info("Price: " + price);
+				LOG.info("Price: " + price);
 			});
 		}
 	}
@@ -135,14 +139,13 @@ public class AmadeusAPITest extends BaseTest {
 		Response response = makeFlightRequest(ORIGIN, PRICE_CONSTRAINT);
 		JsonPath jp = response.jsonPath();
 
-		// Print currencies
 		Map<String, String> currencies = jp.getMap("dictionaries.currencies");
-		System.out.println("=== CURRENCIES ===");
+		LOG.info("=== CURRENCIES ===");
 		currencies.forEach((code, name) -> System.out.printf("Currency: %s = %s%n", code, name));
 
 		// Print locations
 		Map<String, Object> locations = jp.getMap("dictionaries.locations");
-		System.out.println("\\n=== LOCATIONS ===");
+		LOG.info("\\n=== LOCATIONS ===");
 		locations.forEach((code, details) -> {
 			Map<String, Object> locationData = (Map<String, Object>) details;
 
@@ -161,7 +164,7 @@ public class AmadeusAPITest extends BaseTest {
 	 */
 
 	private void validateFlightStructure(Map<String, Object> flight) {
-		log.info("=== CONSOLE: validateFlightStructure called === " + flight.toString());
+		LOG.info("=== CONSOLE: validateFlightStructure called === " + flight.toString());
 		Assert.assertNotNull(flight.get("origin"), "Missing origin");
 		Assert.assertNotNull(flight.get("destination"), "Missing destination");
 
@@ -177,8 +180,11 @@ public class AmadeusAPITest extends BaseTest {
 	 * pattern Bug Identified
 	 */
 	public void shouldDocumentMaxPriceBugBehavior() {
-		Map<String, String> testCases = Map.of("1", "Very low price", "50", "Low price", "200", "Medium price", "1000",
-				"High price");
+		Map<String, String> testCases = Map.of(
+				"1",   "Very low price", 
+				"50",  "Low price", 
+				"200", "Medium price", 
+				"1000","High price");
 
 		testCases.forEach((maxPrice, description) -> {
 			Response res = makeFlightRequest(ORIGIN, maxPrice);
@@ -187,7 +193,7 @@ public class AmadeusAPITest extends BaseTest {
 			BigDecimal actualMaxPrice = flights.stream().map(this::extractPrice).max(BigDecimal::compareTo)
 					.orElse(BigDecimal.ZERO);
 
-			log.info(
+			LOG.info(
 					String.format("%s (maxPrice=%s): Actual max returned = %s", description, maxPrice, actualMaxPrice));
 		});
 	}
@@ -214,7 +220,13 @@ public class AmadeusAPITest extends BaseTest {
 	private Response makeFlightRequest(String origin, String maxPrice) {
 		Map<String, String> queryParams = Map.of("origin", origin, "maxPrice", maxPrice);
 
-		return restClient.get(BASE_URL_AMADEUS_FLIGHT_DETAILS, AMADEUS_FLIGHT_DETAILS_ENDPOINT, queryParams, null,
-				AuthType.BEARER_TOKEN, ContentType.ANY);
+		return restClient.get(
+				BASE_URL_AMADEUS_FLIGHT_DETAILS, 
+				AMADEUS_FLIGHT_DETAILS_ENDPOINT, 
+				queryParams, 
+				null,
+				AuthType.BEARER_TOKEN, 
+				ContentType.ANY
+				);
 	}
 }
