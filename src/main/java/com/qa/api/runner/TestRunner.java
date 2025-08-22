@@ -4,148 +4,183 @@ import org.testng.TestNG;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * TestNG XML Runner for API Tests Executes TestNG XML files from testrunners
- * directory
+ * Executes TestNG XML files from testrunners directory with simplified API
  */
 public class TestRunner {
 
 	private static final String TESTRUNNERS_PATH = "src/test/resources/testrunners";
+	private static final String DEFAULT_XML = "testng_e2e_regression.xml";
 
 	public static void main(String[] args) {
-		File projectRoot = new File("").getAbsoluteFile();
-		System.setProperty("user.dir", projectRoot.getAbsolutePath());
-
-		setupTestClasspath();
-
-		TestRunner runner = new TestRunner();
-
-		runner.runSingleXml("testng_full_regression.xml");
-		System.out.println("=== TestRunner Main Method Completed ===");
+		String xmlFile = args.length > 0 ? args[0] : DEFAULT_XML;
+		new TestRunner().execute(xmlFile);
 	}
+
 	/**
-	 * Setup classpath to include test classes
+	 * Main execution entry point
 	 */
-	private static void setupTestClasspath() {
-		try {
-			File testClasses = new File("target/test-classes");
-			File mainClasses = new File("target/classes");
+	public void execute(String xmlFile) {
+		initializeEnvironment();
+		executeTestSuite(xmlFile);
+		System.out.println("=== TestRunner Completed ===");
+	}
 
-			if (testClasses.exists() && mainClasses.exists()) {
-				URL[] urls = { testClasses.toURI().toURL(), mainClasses.toURI().toURL() };
-
-				URLClassLoader classLoader = new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
-				Thread.currentThread().setContextClassLoader(classLoader);
-
-				System.out.println("Classpath configured for test execution");
-			} else {
-				System.out.println("WARNING: Compiled classes not found. Run 'mvn test-compile' first.");
-			}
-		} catch (Exception e) {
-			System.out.println("WARNING: Could not setup test classpath: " + e.getMessage());
+	/**
+	 * Execute a single test suite or all suites if null
+	 */
+	public void executeTestSuite(String xmlFileName) {
+		if (xmlFileName == null) {
+			executeAllSuites();
+		} else {
+			executeSingleSuite(xmlFileName);
 		}
 	}
+
 	/**
-	 * Run all TestNG XML files in testrunners directory
+	 * Execute all XML files in testrunners directory
 	 */
-	public void runAllXmlFiles() {
-		System.out.println("=== Running All TestNG XML Files ===");
+	public void executeAllSuites() {
+		System.out.println("=== Executing All Test Suites ===");
 
 		List<String> xmlFiles = findAllXmlFiles();
 		if (xmlFiles.isEmpty()) {
 			System.out.println("No XML files found in: " + TESTRUNNERS_PATH);
 			return;
 		}
-		System.out.println("Found " + xmlFiles.size() + " XML files:");
-		xmlFiles.forEach(file -> System.out.println("  - " + new File(file).getName()));
+
+		logFoundFiles(xmlFiles);
+		runTestNG(xmlFiles);
+	}
+
+	/**
+	 * Execute a specific XML file
+	 */
+	private void executeSingleSuite(String xmlFileName) {
+		System.out.println("=== Executing Test Suite: " + xmlFileName + " ===");
+
+		String xmlPath = getXmlPath(xmlFileName);
+		if (!isValidXmlFile(xmlPath)) {
+			handleInvalidFile(xmlFileName);
+			return;
+		}
+
+		System.out.println("Found: " + xmlFileName);
+		runTestNG(Arrays.asList(xmlPath));
+	}
+
+	/**
+	 * Initialize environment for test execution
+	 */
+	private void initializeEnvironment() {
+		setWorkingDirectory();
+		setupClasspath();
+	}
+
+	/**
+	 * Set working directory to project root
+	 */
+	private void setWorkingDirectory() {
+		String projectRoot = new File("").getAbsolutePath();
+		System.setProperty("user.dir", projectRoot);
+	}
+
+	/**
+	 * Setup classpath for test execution
+	 */
+	private void setupClasspath() {
+		try {
+			File testClasses = new File("target/test-classes");
+			File mainClasses = new File("target/classes");
+
+			if (!testClasses.exists() || !mainClasses.exists()) {
+				System.out.println("WARNING: Compiled classes not found. Run 'mvn test-compile' first.");
+				return;
+			}
+
+			URL[] urls = { testClasses.toURI().toURL(), mainClasses.toURI().toURL() };
+			URLClassLoader classLoader = new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
+			Thread.currentThread().setContextClassLoader(classLoader);
+
+			System.out.println("Classpath configured for test execution");
+		} catch (Exception e) {
+			System.out.println("WARNING: Could not setup test classpath: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Execute TestNG with provided XML files
+	 */
+	private void runTestNG(List<String> xmlFiles) {
+		System.out.println("\n=== Starting Test Execution ===");
 
 		TestNG testng = new TestNG();
 		testng.setTestSuites(xmlFiles);
-
-		System.out.println("\n=== Starting Test Execution ===");
 		testng.run();
+
 		System.out.println("\n=== Test Execution Completed ===");
-	}
-
-	/**
-	 * Run specific TestNG XML files provided by user
-	 */
-	public void runSpecificXmlFiles(List<String> xmlFileNames) {
-		System.out.println("=== Running Specific XML Files ===");
-
-		List<String> validXmlPaths = new ArrayList<>();
-		List<String> invalidFiles = new ArrayList<>();
-
-		for (String xmlFileName : xmlFileNames) {
-			String xmlPath = TESTRUNNERS_PATH + "/" + xmlFileName;
-			File xmlFile = new File(xmlPath);
-
-			if (xmlFile.exists()) {
-				validXmlPaths.add(xmlPath);
-				System.out.println("Found: " + xmlFileName);
-			} else {
-				invalidFiles.add(xmlFileName);
-				System.out.println("Not found: " + xmlFileName);
-			}
-		}
-		if (!invalidFiles.isEmpty()) {
-			System.out.println("\nERROR: Some XML files not found:");
-			invalidFiles.forEach(file -> System.out.println("  - " + file));
-			System.out.println("\nAvailable XML files:");
-			findAllXmlFiles().forEach(file -> System.out.println("  - " + new File(file).getName()));
-			return;
-		}
-		if (validXmlPaths.isEmpty()) {
-			System.out.println("No valid XML files to execute!");
-			return;
-		}
-		TestNG testng = new TestNG();
-		testng.setTestSuites(validXmlPaths);
-
-		System.out.println("\nExecuting " + validXmlPaths.size() + " XML file(s):");
-		validXmlPaths.forEach(path -> System.out.println("  - " + new File(path).getName()));
-		System.out.println("\n=== Starting Test Execution ===");
-		testng.run();
-		System.out.println("\n=== Test Execution Completed ===");
-	}
-
-	/**
-	 * Run single TestNG XML file or all files
-	 * @param xmlFileName - if provided, runs only that file; if null, runs all
-	 * files
-	 */
-	public void runSingleXml(String xmlFileName) {
-		System.out.println("xml file name : " + xmlFileName);
-		if (xmlFileName != null) {
-			runSpecificXmlFiles(Arrays.asList(xmlFileName));
-		} else {
-			runAllXmlFiles();
-		}
 	}
 
 	/**
 	 * Find all XML files in testrunners directory
 	 */
 	private List<String> findAllXmlFiles() {
-		List<String> xmlFiles = new ArrayList<>();
-		File runnersDir = new File(TESTRUNNERS_PATH);
+		try {
+			Path runnersDir = Paths.get(TESTRUNNERS_PATH);
 
-		if (!runnersDir.exists()) {
-			System.out.println("ERROR: Testrunners directory not found: " + TESTRUNNERS_PATH);
-			return xmlFiles;
-		}
-		File[] files = runnersDir.listFiles((dir, name) -> name.toLowerCase().endsWith(".xml"));
-
-		if (files != null) {
-			Arrays.sort(files);
-			for (File file : files) {
-				xmlFiles.add(file.getAbsolutePath());
+			if (!Files.exists(runnersDir)) {
+				System.out.println("ERROR: Testrunners directory not found: " + TESTRUNNERS_PATH);
+				return Arrays.asList();
 			}
+
+			return Files.list(runnersDir).filter(Files::isRegularFile)
+					.filter(path -> path.toString().toLowerCase().endsWith(".xml")).sorted().map(Path::toAbsolutePath)
+					.map(Path::toString).collect(Collectors.toList());
+
+		} catch (Exception e) {
+			System.out.println("ERROR: Could not scan testrunners directory: " + e.getMessage());
+			return Arrays.asList();
 		}
-		return xmlFiles;
+	}
+
+	/**
+	 * Get full path for XML file
+	 */
+	private String getXmlPath(String xmlFileName) {
+		return TESTRUNNERS_PATH + "/" + xmlFileName;
+	}
+
+	/**
+	 * Check if XML file exists
+	 */
+	private boolean isValidXmlFile(String xmlPath) {
+		return Files.exists(Paths.get(xmlPath));
+	}
+
+	/**
+	 * Handle invalid file scenario
+	 */
+	private void handleInvalidFile(String xmlFileName) {
+		System.out.println("ERROR: XML file not found: " + xmlFileName);
+		System.out.println("\nAvailable XML files:");
+
+		findAllXmlFiles().stream().map(path -> Paths.get(path).getFileName().toString())
+				.forEach(name -> System.out.println("  - " + name));
+	}
+
+	/**
+	 * Log found XML files
+	 */
+	private void logFoundFiles(List<String> xmlFiles) {
+		System.out.println("Found " + xmlFiles.size() + " XML files:");
+		xmlFiles.stream().map(path -> Paths.get(path).getFileName().toString())
+				.forEach(name -> System.out.println("  - " + name));
 	}
 }
