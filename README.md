@@ -124,3 +124,8 @@ graph TB
 - [x] Implement Product & Contact POJOs
 - [ ] Build Assertion utilities 
 ***Current status:**** Modules marked "✅" are implemented. Others are pending implementation.*
+
+## Custom Test Report HTML added | Instead of 'Allure' Logo Showing "CAPCO" logo in the report
+<img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/f3b3bb65-887f-4a14-a3ba-241e657d89c3" />
+
+
