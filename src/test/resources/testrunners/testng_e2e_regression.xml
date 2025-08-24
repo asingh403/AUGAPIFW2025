@@ -3,7 +3,7 @@
 
 <suite name="API Regression Suite" verbose="4" preserve-order="true" parallel="none">
 
-<!-- 	
+	<!-- 	
 	<listeners>
 		<listener class-name="com.aventstack.chaintest.plugins.ChainTestListener" />
 	</listeners>
@@ -47,7 +47,7 @@
 			<package name="com.qa.api.reqres.tests" />
 		</packages>
 	</test>
-
+	
 	<test name="Amadeus API Tests">
 		<packages>
 			<package name="com.qa.api.amadeus.tests" />
