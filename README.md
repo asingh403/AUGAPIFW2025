@@ -125,7 +125,7 @@ graph TB
 - [ ] Build Assertion utilities 
 ***Current status:**** Modules marked "✅" are implemented. Others are pending implementation.*
 
-## Custom Test Report HTML added | Instead of 'Allure' Logo Showing "CAPCO" logo in the report
-<img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/f3b3bb65-887f-4a14-a3ba-241e657d89c3" />
+## Custom Test Report HTML added | Instead of 'Allure' Logo Showing "CAPCO" logo in the report with Confetti Style Animation
+<img   width="600"   height="400"   alt="image"   src="https://github.com/user-attachments/assets/849a838c-5ff6-4c21-bbc9-d93f1f8a9a30" />
 
 
