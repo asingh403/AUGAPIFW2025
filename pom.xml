@@ -80,7 +80,7 @@
 		</dependency>
 
 		<!-- Reporting dependecies-->
-<!-- 
+		<!-- 
 		<dependency>
 			<groupId>com.aventstack</groupId>
 			<artifactId>chaintest-testng</artifactId>
@@ -118,6 +118,7 @@
 				</configuration>
 			</plugin>
 
+			<!-- 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -131,6 +132,21 @@
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
+-->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.2.5</version>
+				<configuration>
+					<suiteXmlFiles>
+						<suiteXmlFile>src/test/resources/testrunners/testng.xml</suiteXmlFile>
+					</suiteXmlFiles>
+					<includes />
+				</configuration>
+			</plugin>
+
+
 		</plugins>
 	</build>
 </project>
