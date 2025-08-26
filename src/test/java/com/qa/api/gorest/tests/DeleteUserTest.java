@@ -8,10 +8,26 @@ import com.qa.api.constants.AuthType;
 import com.qa.api.pojo.User;
 import com.qa.api.utils.StringUtils;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Link;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.TmsLink;
+import io.qameta.allure.testng.Tag;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 public class DeleteUserTest extends BaseTest {
+	@Epic("Customer Deletion using user id")
+	@Severity(SeverityLevel.CRITICAL)
+	@Owner("Ashutosh Singh")
+	@Tag("Regression")
+	@Tag("API")
+	@Link(name = "Wiki Doc", url = "https://learn-asingh.atlassian.net/browse/DAL-3")
+	@Issue("JIRA-DAL-3")
+	@TmsLink("TC-345")
 	@Test
 	public void deleteUserTest() {
 		String name = StringUtils.getRandomName();

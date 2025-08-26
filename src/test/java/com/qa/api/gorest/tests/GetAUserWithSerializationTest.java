@@ -10,6 +10,14 @@ import com.qa.api.pojo.User;
 import com.qa.api.utils.JsonUtils;
 import com.qa.api.utils.StringUtils;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Link;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.TmsLink;
+import io.qameta.allure.testng.Tag;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -24,6 +32,14 @@ public class GetAUserWithSerializationTest extends BaseTest {
 
 	}
 
+	@Epic("Fethc Customer based on user Id")
+	@Severity(SeverityLevel.CRITICAL)
+	@Owner("Ashutosh Singh")
+	@Tag("Regression")
+	@Tag("API")
+	@Link(name = "Wiki Doc", url = "https://learn-asingh.atlassian.net/browse/DAL-2")
+	@Issue("JIRA-DAL-3")
+	@TmsLink("TC-466")
 	@Test
 	public void createUserTest() {
 		String expectedName = StringUtils.getRandomName();

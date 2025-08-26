@@ -3,22 +3,42 @@ package com.qa.api.gorest.tests;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
 import com.qa.api.base.BaseTest;
 import com.qa.api.constants.AuthType;
 import com.qa.api.pojo.User;
 import com.qa.api.utils.StringUtils;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Link;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.TmsLink;
+import io.qameta.allure.testng.Tag;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
+@Feature("Customer Onboarding")
 public class CreateUserTest extends BaseTest{
 	
 	static {
         System.out.println("=== CreateUserTest STATIC BLOCK EXECUTING ===");
     }
 	
+	@Epic("Customer Creation")
+	@Severity(SeverityLevel.CRITICAL)
+	@Owner("Ashutosh Singh")
+	@Tag("Regression")
+	@Tag("API")
+	@Link(name = "Wiki Doc", url = "https://learn-asingh.atlassian.net/browse/DAL-2")
+	@Issue("JIRA-DAL-2")
+	@TmsLink("TC-456")
 	@Test
 	public void createUserTest() {
 		User user = new User(null, "Ashutosh", StringUtils.getRandomEmailId(), "Male", "Active");
@@ -28,7 +48,14 @@ public class CreateUserTest extends BaseTest{
 		LOG.info("Get userId : "+response.jsonPath().getString("id"));
 		
 	}
-	
+	@Epic("Single Customer Creation")
+	@Severity(SeverityLevel.CRITICAL)
+	@Owner("Ashutosh Singh")
+	@Tag("Regression")
+	@Tag("API")
+	@Link(name = "Wiki Doc", url = "https://learn-asingh.atlassian.net/browse/DAL-3")
+	@Issue("JIRA-DAL-3")
+	@TmsLink("TC-456")
 	@Test
 	public void createUserWithStringTest() {
 		String name = StringUtils.getRandomName();
@@ -44,6 +71,14 @@ public class CreateUserTest extends BaseTest{
 		
 	}
 	
+	@Epic("Single Customer Creation using JSON")
+	@Severity(SeverityLevel.CRITICAL)
+	@Owner("Ashutosh Singh")
+	@Tag("Regression")
+	@Tag("API")
+	@Link(name = "Wiki Doc", url = "https://learn-asingh.atlassian.net/browse/DAL-3")
+	@Issue("JIRA-DAL-3")
+	@TmsLink("TC-456")
 	@Test	
 	public void createUserWithJsonTest() throws IOException {
 		

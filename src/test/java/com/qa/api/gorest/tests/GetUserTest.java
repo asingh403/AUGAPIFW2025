@@ -6,6 +6,15 @@ import org.testng.annotations.Test;
 import com.qa.api.base.BaseTest;
 import com.qa.api.constants.AuthType;
 import com.qa.api.manager.ConfigManger;
+
+import io.qameta.allure.Epic;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Link;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.TmsLink;
+import io.qameta.allure.testng.Tag;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -13,6 +22,14 @@ public class GetUserTest extends BaseTest{
 	
 	private static String userId;
 	
+	@Epic("Get all the user from the Customer dB")
+	@Severity(SeverityLevel.CRITICAL)
+	@Owner("Ashutosh Singh")
+	@Tag("Regression")
+	@Tag("API")
+	@Link(name = "Wiki Doc", url = "https://learn-asingh.atlassian.net/browse/DAL-3")
+	@Issue("JIRA-DAL-3")
+	@TmsLink("TC-223")
 	@Test(priority = 1)
 	public void getAllUsersTest() {
 		LOG.info("Bearer Token from Config: " + ConfigManger.get("bearertoken"));
@@ -23,6 +40,14 @@ public class GetUserTest extends BaseTest{
 	}
 	
 	
+	@Epic("get Customer based on Query Params")
+	@Severity(SeverityLevel.CRITICAL)
+	@Owner("Ashutosh Singh")
+	@Tag("Regression")
+	@Tag("API")
+	@Link(name = "Wiki Doc", url = "https://learn-asingh.atlassian.net/browse/DAL-3")
+	@Issue("JIRA-DAL-3")
+	@TmsLink("TC-456")
 	@Test
 	public void getAllUsersWithQueryParamTest() {
 		Map<String, String> queryParams = Map.of("name", "Ashutosh", "Status", "Active"); 

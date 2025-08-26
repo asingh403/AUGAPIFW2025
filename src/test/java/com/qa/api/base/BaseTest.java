@@ -1,5 +1,9 @@
 package com.qa.api.base;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Reporter;
@@ -40,7 +44,19 @@ public class BaseTest {
 	@BeforeSuite
 	public void setupAllureReport() {
 		RestAssured.filters(new AllureRestAssured());
-	}
+		Properties props = new Properties();
+        props.setProperty("OS", System.getProperty("os.name"));
+        props.setProperty("Java", System.getProperty("java.version"));
+        props.setProperty("Environment", "QA");
+        props.setProperty("Browser", "Chrome-126");
+        props.setProperty("Build", "LocalRun-" + System.currentTimeMillis());
+
+        try (FileOutputStream fos = new FileOutputStream("allure-results/environment.properties")) {
+            props.store(fos, "Allure Environment Properties");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 	@BeforeClass(alwaysRun = true)
 	public void setup() throws InterruptedException {
