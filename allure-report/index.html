@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>CAPCO TAF - Allure Report</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="plugin/screen-diff/styles.css">
+
+    <style>
+    /* Enhanced Confetti and Firework Animation */
+    .confetti {
+        pointer-events: none;
+    }
+
+    .firework {
+        pointer-events: none;
+    }
+
+    .celebration-message {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+        color: white;
+        padding: 20px 40px;
+        font-size: 24px;
+        font-weight: bold;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        z-index: 10001;
+        animation: celebration-bounce 2s ease-in-out;
+    }
+
+    @keyframes celebration-bounce {
+        0%, 20%, 60%, 100% { transform: translate(-50%, -50%) translateY(0); }
+        40% { transform: translate(-50%, -50%) translateY(-20px); }
+        80% { transform: translate(-50%, -50%) translateY(-10px); }
+    }
+    </style>
+</head>
+<body>
+    <img src="plugins/custom-logo-plugin/static/logo.png" alt="CAPCO Logo" style="position: fixed; top: 0px; left: 0px; width: 178px; height: 76px; z-index: 9999;">
+    <div id="alert"></div>
+    <div id="content">
+        <span class="spinner">
+            <span class="spinner__circle"></span>
+        </span>
+    </div>
+    <div id="popup"></div>
+    <script src="app.js"></script>
+    <script src="plugin/behaviors/index.js"></script>
+    <script src="plugin/packages/index.js"></script>
+    <script src="plugin/screen-diff/index.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FVWC4GKEYS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-FVWC4GKEYS', {
+          'allureVersion': '2.34.1',
+          'reportUuid': '048e174a-e7fd-4190-882f-89d9f75145e1',
+          'single_file': false
+        });
+    </script>
+    <script>
+        function changeReportTitle() {
+            // Define current date
+            const currentDate = new Date().toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            }).toUpperCase().replace(/,/g, '');
+
+            // Target all possible text nodes
+            const walker = document.createTreeWalker(
+                document.body,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+
+            let node;
+            while (node = walker.nextNode()) {
+    if (node.textContent.includes('ALLURE REPORT') || node.textContent.includes('Allure Report')) {
+        const span = document.createElement("span");
+        span.innerHTML = `<b>Execution Report</b> | ${currentDate}`;
+        node.parentNode.replaceChild(span, node);
+    }
+}
+
+
+            // Also target specific elements
+            const possibleSelectors = [
+                'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                '.title', '.heading', '.header',
+                '[class*="title"]', '[class*="heading"]', '[class*="header"]',
+                'div', 'span', 'p'
+            ];
+
+            possibleSelectors.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    if (el.textContent && (el.textContent.includes('ALLURE REPORT') || el.textContent.includes('Allure Report'))) {
+                        el.textContent = `Execution Report | ${currentDate}`;
+                    }
+                });
+            });
+        }
+
+        function checkForCelebration() {
+            setTimeout(function() {
+                const passRateElements = document.querySelectorAll('*');
+                let passRate = 0;
+
+                // Look for percentage in various formats
+                passRateElements.forEach(element => {
+                    const text = element.textContent;
+
+                    // Check for percentage in text nodes without children
+                    if (text.includes('%') && !element.children.length) {
+                        const percentage = text.match(/(\d+\.?\d*)%/);
+                        if (percentage) {
+                            passRate = Math.round(parseFloat(percentage[1]));
+                        }
+                    }
+                });
+
+                console.log('Pass rate found:', passRate + '%');
+                
+                if (passRate >= 60) {
+                    startCelebration(passRate);
+                }
+            }, 3000);
+        }
+
+        function startCelebration(passRate) {
+            console.log('Celebration started for:', passRate + '%');
+            
+            const message = document.createElement('div');
+            message.className = 'celebration-message';
+            
+            if (passRate === 100) {
+                message.innerHTML = '🎉 PERFECT! 100% TESTS PASSED! 🎉';
+            } else if (passRate >= 90) {
+                message.innerHTML = '🌟 EXCELLENT! ' + passRate + '% TESTS PASSED! 🌟';
+            } else if (passRate >= 80) {
+                message.innerHTML = '👏 GREAT JOB! ' + passRate + '% TESTS PASSED! 👏';
+            } else {
+                message.innerHTML = '✨ GOOD WORK! ' + passRate + '% TESTS PASSED! ✨';
+            }
+            
+            document.body.appendChild(message);
+
+            // Create 400 confetti particles with staggered timing
+            for (let i = 0; i < 400; i++) {
+                setTimeout(() => createConfetti(), i * 15); // Stagger creation
+            }
+
+            // Create multiple firework bursts
+            setTimeout(() => createFirework(200, 200), 500);
+            setTimeout(() => createFirework(window.innerWidth - 200, 300), 1000);
+            setTimeout(() => createFirework(window.innerWidth / 2, 250), 1500);
+            setTimeout(() => createFirework(300, 400), 2000);
+            setTimeout(() => createFirework(window.innerWidth - 300, 450), 2500);
+
+            // Remove celebration after 8 seconds
+            setTimeout(function() {
+                message.remove();
+                document.querySelectorAll('.confetti').forEach(confetti => confetti.remove());
+                document.querySelectorAll('.firework').forEach(firework => firework.remove());
+            }, 8000);
+        }
+
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            
+            // Random starting position
+            const startX = Math.random() * window.innerWidth;
+            const startY = -20;
+            
+            // Enhanced velocity (25 base) and horizontal speed (60 range)
+            const velocity = 25 + Math.random() * 25; // 25-50 velocity
+            const horizontalSpeed = (Math.random() - 0.5) * 60; // -30 to +30 horizontal speed
+            
+            confetti.style.position = 'fixed';
+            confetti.style.left = startX + 'px';
+            confetti.style.top = startY + 'px';
+            confetti.style.width = (Math.random() * 10 + 8) + 'px'; // 8-18px size
+            confetti.style.height = (Math.random() * 10 + 8) + 'px';
+            confetti.style.zIndex = '10000';
+            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0'; // Mix circles and squares
+            
+            // Vibrant color palette
+            const colors = [
+                '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', 
+                '#dda0dd', '#98d8c8', '#f7dc6f', '#bb8fce', '#ff9ff3',
+                '#54a0ff', '#5f27cd', '#00d2d3', '#ff9f43', '#10ac84',
+                '#ee5a24', '#0abde3', '#006ba6', '#f39c12', '#8e44ad'
+            ];
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.boxShadow = '0 0 10px rgba(255,255,255,0.8)';
+            
+            document.body.appendChild(confetti);
+            
+            // Physics-based animation
+            let currentY = startY;
+            let currentX = startX;
+            let currentVelocity = velocity;
+            const gravity = 0.8;
+            let opacity = 1;
+            let rotation = 0;
+            
+            const animate = () => {
+                currentY += currentVelocity;
+                currentX += horizontalSpeed * 0.1;
+                currentVelocity += gravity;
+                opacity -= 0.004;
+                rotation += 5;
+                
+                confetti.style.top = currentY + 'px';
+                confetti.style.left = currentX + 'px';
+                confetti.style.opacity = opacity;
+                confetti.style.transform = `rotate(${rotation}deg)`;
+                
+                if (currentY < window.innerHeight + 100 && opacity > 0) {
+                    requestAnimationFrame(animate);
+                } else {
+                    confetti.remove();
+                }
+            };
+            
+            requestAnimationFrame(animate);
+        }
+
+        function createFirework(x, y) {
+            // Create 25 particles per firework burst
+            for (let i = 0; i < 25; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework';
+                
+                const angle = (i / 25) * Math.PI * 2;
+                const velocity = Math.random() * 6 + 4; // 4-10 velocity
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                
+                particle.style.position = 'fixed';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.width = '6px';
+                particle.style.height = '6px';
+                particle.style.borderRadius = '50%';
+                particle.style.zIndex = '10002';
+                
+                // Bright firework colors
+                const colors = [
+                    '#fff', '#ffff00', '#ff6b6b', '#4ecdc4', '#45b7d1', 
+                    '#ffeaa7', '#dda0dd', '#ff9ff3', '#54a0ff', '#00d2d3'
+                ];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.background = color;
+                particle.style.boxShadow = `0 0 15px ${color}`;
+                
+                document.body.appendChild(particle);
+                
+                // Animate firework particle
+                let currentX = x;
+                let currentY = y;
+                let currentVx = vx;
+                let currentVy = vy;
+                let opacity = 1;
+                
+                const animateFirework = () => {
+                    currentX += currentVx;
+                    currentY += currentVy;
+                    currentVy += 0.15; // gravity
+                    currentVx *= 0.98; // air resistance
+                    opacity -= 0.015;
+                    
+                    particle.style.left = currentX + 'px';
+                    particle.style.top = currentY + 'px';
+                    particle.style.opacity = opacity;
+                    
+                    if (opacity > 0 && currentY < window.innerHeight + 50) {
+                        requestAnimationFrame(animateFirework);
+                    } else {
+                        particle.remove();
+                    }
+                };
+                
+                setTimeout(() => requestAnimationFrame(animateFirework), i * 30);
+            }
+        }
+
+        // Run all customizations
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                changeReportTitle();
+                checkForCelebration();
+            }, 2000);
+        });
+
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                changeReportTitle();
+                checkForCelebration();
+            }, 1000);
+        });
+
+        // Monitor for changes and update title
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                    setTimeout(changeReportTitle, 100);
+                }
+            });
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            characterData: true
+        });
+    </script>
+</body>
+</html>

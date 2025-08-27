@@ -1,0 +1,1 @@
+{"uuid":"c330df45-483d-4e36-873f-ead225c4930e","name":"com.qa.api.basicauth.tests.BasicAuthTest","children":["3c1081fa-08d6-4999-a288-8f57203c57b9"],"befores":[{"name":"setup","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1756122827853,"stop":1756122828856}],"afters":[],"start":1756122827853,"stop":1756122835972}
