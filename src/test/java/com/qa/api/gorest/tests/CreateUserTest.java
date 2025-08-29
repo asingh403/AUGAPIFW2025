@@ -93,6 +93,7 @@ public class CreateUserTest extends BaseTest{
 		Response response = restClient.post(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, userJson, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.jsonPath().getString("name"), "Abhi p");
 		Assert.assertNotNull(response.jsonPath().getString("id"));
+		Assert.assertEquals(response.getStatusCode(), 201);
 		
 		
 		
@@ -130,7 +131,7 @@ public class CreateUserTest extends BaseTest{
 				+ "\"name\": \"" + name + "\",\n"
 				+ "\"gender\": \"" + gender + "\",\n"
 				+ "\"email\": \"" + StringUtils.getRandomEmailId() + "\",\n"
-				+ "\"status\": \"" + status + "\",\n"
+				+ "\"status\": \"" + status + "\"\n"
 				+ "}";
 		Response response = restClient.post(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, userJson, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.jsonPath().getString("name"), name);
