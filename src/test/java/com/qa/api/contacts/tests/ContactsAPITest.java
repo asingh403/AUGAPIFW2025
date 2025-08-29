@@ -17,16 +17,6 @@ public class ContactsAPITest extends BaseTest {
 	private String tokenId;
 	private boolean tokenInitialized = false;
 
-//	@BeforeMethod
-//	public void ensureTokenSetup() {
-//		if (!tokenInitialized && restClient != null) {
-//			getToken();
-//			tokenInitialized = true;
-//		} else if (restClient == null) {
-//			throw new RuntimeException("RestClient is null in ContactsAPITest");
-//		}
-//	}
-
 	@BeforeMethod(alwaysRun = true) 
 	public void getToken() {
 		ContactCredentials creds = ContactCredentials.builder().email("asingh.tic@gmail.com").password("1108noki@")

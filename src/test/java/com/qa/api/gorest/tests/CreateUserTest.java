@@ -5,11 +5,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.qa.api.base.BaseTest;
+import com.qa.api.constants.AppConstants;
 import com.qa.api.constants.AuthType;
 import com.qa.api.pojo.User;
+import com.qa.api.utils.ExcelUtils;
 import com.qa.api.utils.StringUtils;
 
 import io.qameta.allure.Epic;
@@ -98,4 +101,43 @@ public class CreateUserTest extends BaseTest{
 
 	}
 
+	@DataProvider
+	public Object [][] getUserData() {
+		return new Object[][] {
+			{"Priyanka", "Female", "active"},
+			{"Abhishek", "Male", "active"},
+			{"Faraz", "Male", "inactive"}
+		};
+	}
+	
+	@DataProvider
+	public Object[][] getExcelData() {
+		return ExcelUtils.readData(AppConstants.CREATE_USER_SHEET_NAME);
+	}
+	
+	@Epic("Multiple Customer Creation using DataProvider")
+	@Severity(SeverityLevel.CRITICAL)
+	@Owner("Ashutosh Singh")
+	@Tag("Regression")
+	@Tag("API")
+	@Link(name = "Wiki Doc", url = "https://learn-asingh.atlassian.net/browse/DAL-3")
+	@Issue("JIRA-DAL-3")
+	@TmsLink("TC-458")
+	@Test(dataProvider = "getExcelData")
+	public void createMultipleUserWithStringTest(String name, String gender, String status) {
+//		String name = StringUtils.getRandomName();
+		String userJson = "{\n"
+				+ "\"name\": \"" + name + "\",\n"
+				+ "\"gender\": \"" + gender + "\",\n"
+				+ "\"email\": \"" + StringUtils.getRandomEmailId() + "\",\n"
+				+ "\"status\": \"" + status + "\",\n"
+				+ "}";
+		Response response = restClient.post(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, userJson, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Assert.assertEquals(response.jsonPath().getString("name"), name);
+		Assert.assertEquals(response.jsonPath().getString("gender"), gender);
+		Assert.assertEquals(response.jsonPath().getString("status"), status);
+		Assert.assertNotNull(response.jsonPath().getString("id"));
+		
+	}
+	
 }
