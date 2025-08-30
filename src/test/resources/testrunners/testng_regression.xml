@@ -3,10 +3,10 @@
 
 <suite name="API Regression Suite" verbose="4" preserve-order="true" parallel="none">
 
- 	
-	<listeners>
+
+	<!-- <listeners>
 		<listener class-name="com.aventstack.chaintest.plugins.ChainTestListener" />
-	</listeners>
+	</listeners>-->
 
 
 	<listeners>
