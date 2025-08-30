@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="API Regression Suite" verbose="4" preserve-order="true" parallel="none">
+
+	<!-- 	
+	<listeners>
+		<listener class-name="com.aventstack.chaintest.plugins.ChainTestListener" />
+	</listeners>
+-->
+
+	<listeners>
+		<listener class-name="io.qameta.allure.testng.AllureTestNg" />
+	</listeners>
+
+	<test name="API Schema Tests">
+		<packages>
+			<package name="com.qa.api.schema.tests" />
+		</packages>
+	</test>
+</suite>

@@ -167,7 +167,8 @@
 				<version>3.2.5</version>
 				<configuration>
 					<suiteXmlFiles>
-						<suiteXmlFile>src/test/resources/testrunners/testng.xml</suiteXmlFile>
+						<!-- <suiteXmlFile>src/test/resources/testrunners/testng.xml</suiteXmlFile> -->
+						<suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
 					</suiteXmlFiles>
 					<includes />
 				</configuration>
