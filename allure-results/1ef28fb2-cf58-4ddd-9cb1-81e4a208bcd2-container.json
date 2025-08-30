@@ -1,1 +1,0 @@
-{"uuid":"1ef28fb2-cf58-4ddd-9cb1-81e4a208bcd2","name":"com.qa.api.gorest.tests.DeleteUserTest","children":["4bed1436-bb12-4dfe-8f9c-be00f2b833dc"],"befores":[{"name":"setup","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1756121557178,"stop":1756121558184}],"afters":[],"start":1756121526628,"stop":1756121570726}

@@ -1,5 +1,6 @@
 package com.qa.api.base;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -10,7 +11,9 @@ import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
+
 import com.qa.api.client.RestClient;
+
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 
@@ -43,34 +46,38 @@ public class BaseTest {
 
 	@BeforeSuite
 	public void setupAllureReport() {
+		File allureResultsDir = new File("allure-results");
+		if (!allureResultsDir.exists()) {
+			allureResultsDir.mkdirs();
+		}
+
 		RestAssured.filters(new AllureRestAssured());
 		Properties props = new Properties();
-        props.setProperty("OS", System.getProperty("os.name"));
-        props.setProperty("Java", System.getProperty("java.version"));
-        props.setProperty("Environment", "QA");
-        props.setProperty("Browser", "Chrome-126");
-        props.setProperty("Build", "LocalRun-" + System.currentTimeMillis());
+		props.setProperty("OS", System.getProperty("os.name"));
+		props.setProperty("Java", System.getProperty("java.version"));
+		props.setProperty("Environment", "QA");
+		props.setProperty("Browser", "Chrome-126");
+		props.setProperty("Build", "LocalRun_" + System.currentTimeMillis());
 
-        try (FileOutputStream fos = new FileOutputStream("allure-results/environment.properties")) {
-            props.store(fos, "Allure Environment Properties");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+		try (FileOutputStream fos = new FileOutputStream("allure-results/environment.properties")) {
+			props.store(fos, "Allure Environment Properties");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@BeforeClass(alwaysRun = true)
 	public void setup() throws InterruptedException {
 		Reporter.log("SETUP START: " + this.getClass().getSimpleName());
 		Thread.sleep(1000);
-//		restClient = new RestClient();
-		System.out.println("RestClient created: " + (restClient != null ? "SUCCESS" : "FAILED"));
+		LOG.info("RestClient created: " + (restClient != null ? "SUCCESS" : "FAILED"));
 	}
 
 	@AfterMethod
 	public void cleanup() throws InterruptedException {
 		testCount++;
-		int delay = 2000 + (testCount * 100);
+		int delay = 1000 + (testCount * 100);
 		Thread.sleep(delay);
-		System.out.println("Delay after test #" + testCount + ": " + delay + "ms");
+		LOG.warn("Delay after test #" + testCount + ": " + delay + "ms");
 	}
 }

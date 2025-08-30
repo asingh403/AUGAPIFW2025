@@ -9,6 +9,10 @@
 	</listeners>
 -->
 
+	<listeners>
+		<listener class-name="io.qameta.allure.testng.AllureTestNg" />
+	</listeners>
+
 	<test name="GoRest API Tests">
 		<packages>
 			<package name="com.qa.api.gorest.tests" />
@@ -47,13 +51,12 @@
 			<package name="com.qa.api.reqres.tests" />
 		</packages>
 	</test>
- 
+
 	<test name="Amadeus API Tests">
 		<packages>
 			<package name="com.qa.api.amadeus.tests" />
 		</packages>
 	</test>
-
 
 
 </suite>

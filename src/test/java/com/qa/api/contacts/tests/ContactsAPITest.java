@@ -27,7 +27,7 @@ public class ContactsAPITest extends BaseTest {
 		Assert.assertEquals(response.statusCode(), 200);
 		tokenId = response.jsonPath().getString("token");
 		ConfigManger.set("bearertoken", tokenId);
-		System.out.println("token id :: " + tokenId);
+		LOG.info("token id :: " + tokenId);
 	}
 
 	@Test

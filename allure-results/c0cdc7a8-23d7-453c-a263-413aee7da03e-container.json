@@ -1,1 +1,0 @@
-{"uuid":"c0cdc7a8-23d7-453c-a263-413aee7da03e","name":"com.qa.api.contacts.tests.ContactsAPITest","children":["f0a8504c-6588-441c-9809-806c3242994b"],"befores":[{"name":"setup","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1756155476545,"stop":1756155477551}],"afters":[],"start":1756155476545,"stop":1756155484182}

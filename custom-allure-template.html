@@ -52,7 +52,7 @@
             let node;
             while (node = walker.nextNode()) {
                 if (node.textContent.includes('ALLURE REPORT') || node.textContent.includes('Allure Report')) {
-                    node.textContent = `CIT-Execution-Report | ${currentDate}`;
+                    node.textContent = `Execution-Report | ${currentDate}`;
                 }
             }
         }
