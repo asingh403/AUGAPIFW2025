@@ -256,7 +256,8 @@ main() {
     print_success "Customizations applied"
     
     # Step 8: Open report
-    print_status "Opening customized Allure report..."
+    print_status "Custom Allure report generated at: $ALLURE_REPORT_DIR/"
+    echo "Report location: $(pwd)/$ALLURE_REPORT_DIR"
     allure open "$ALLURE_REPORT_DIR/"
     
     echo "================================================"
