@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Allure Report Customizer Script
+# Allure Report Customizer Script - Jenkins Compatible
 # This script generates fresh Allure reports with custom logo, confetti, and styling
 
 set -e  # Exit on any error
@@ -11,6 +11,9 @@ ALLURE_REPORT_DIR="allure-report"
 LOGO_SOURCE="src/test/resources/src/test/resources/logo.png"
 PLUGIN_DIR="$ALLURE_REPORT_DIR/plugins/custom-logo-plugin/static"
 CUSTOM_HTML_TEMPLATE="custom-allure-template.html"
+
+# Jenkins-specific Allure command path
+ALLURE_CMD="/Users/ashutoshsingh/.jenkins/tools/ru.yandex.qatools.allure.jenkins.tools.AllureCommandlineInstallation/allure/bin/allure"
 
 # Colors for output
 RED='\033[0;31m'
@@ -50,8 +53,8 @@ check_prerequisites() {
         exit 1
     fi
     
-    if ! command -v allure &> /dev/null; then
-        print_error "Allure command not found. Please install Allure."
+    if [ ! -f "$ALLURE_CMD" ]; then
+        print_error "Allure command not found at $ALLURE_CMD"
         exit 1
     fi
     
@@ -139,7 +142,7 @@ create_custom_template() {
             message.className = 'celebration-message';
             if (passRate === 100) message.innerHTML = '🎉 PERFECT! 100% TESTS PASSED! 🎉';
             else if (passRate >= 90) message.innerHTML = '🌟 EXCELLENT! ' + passRate + '% TESTS PASSED! 🌟';
-            else if (passRate >= 80) message.innerHTML = '👏 GREAT JOB! ' + passRate + '% TESTS PASSED! 👏';
+            else if (passRate >= 80) message.innerHTML = '👍 GREAT JOB! ' + passRate + '% TESTS PASSED! 👍';
             else message.innerHTML = '✨ GOOD WORK! ' + passRate + '% TESTS PASSED! ✨';
             document.body.appendChild(message);
             for (let i = 0; i < 500; i++) setTimeout(() => createConfetti(), i * 15);
@@ -229,9 +232,9 @@ main() {
     # Step 1: Check prerequisites
     check_prerequisites
     
-    # Step 2: Generate fresh Allure report
+    # Step 2: Generate fresh Allure report using Jenkins Allure installation
     print_status "Generating fresh Allure report..."
-    allure generate "$ALLURE_RESULTS_DIR/" --output-dir "$ALLURE_REPORT_DIR" --clean
+    "$ALLURE_CMD" generate "$ALLURE_RESULTS_DIR/" --output-dir "$ALLURE_REPORT_DIR" --clean
     print_success "Allure report generated"
     
     # Step 3: Create plugin directory structure
@@ -255,10 +258,9 @@ main() {
     cp "$CUSTOM_HTML_TEMPLATE" "$ALLURE_REPORT_DIR/index.html"
     print_success "Customizations applied"
     
-    # Step 8: Open report
+    # Step 8: Report ready for Jenkins publishing (removed allure open command)
     print_status "Custom Allure report generated at: $ALLURE_REPORT_DIR/"
     echo "Report location: $(pwd)/$ALLURE_REPORT_DIR"
-    allure open "$ALLURE_REPORT_DIR/"
     
     echo "================================================"
     print_success "Customized Allure report is ready!"
@@ -267,6 +269,7 @@ main() {
     echo "  - Dynamic title with current date"
     echo "  - Confetti celebration for ≥60% pass rate"
     echo "  - Firework animations for 100% pass rate"
+    echo "  - Jenkins-compatible execution"
 }
 
 # Run main function
