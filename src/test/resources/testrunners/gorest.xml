@@ -7,6 +7,11 @@
 		<listener class-name="io.qameta.allure.testng.AllureTestNg" />
 	</listeners>
 
+	<listeners>
+		<listener class-name="com.aventstack.chaintest.plugins.ChainTestListener" />
+	</listeners>
+
+
 	<test name="GoRest API Tests">
 		<packages>
 			<package name="com.qa.api.gorest.tests" />
