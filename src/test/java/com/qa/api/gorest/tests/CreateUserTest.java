@@ -153,10 +153,11 @@ public class CreateUserTest extends BaseTest {
 	@TmsLink("TC-458")
 	@Test(dataProvider = "getExcelData")
 	public void createMultipleUserWithStringTest(String name, String gender, String status) {
+		String email = StringUtils.getRandomEmailId();
 		String userJson = "{\n" 
 				+ "\"name\": \"" + name + "\",\n" 
 				+ "\"gender\": \"" + gender + "\",\n"
-				+ "\"email\": \"" + StringUtils.getRandomEmailId() + "\",\n" 
+				+ "\"email\": \"" + email + "\",\n" 
 				+ "\"status\": \"" + status + "\"\n" + "}";
 		Response response = restClient.post
 				(
@@ -172,6 +173,7 @@ public class CreateUserTest extends BaseTest {
 		Assert.assertEquals(response.jsonPath().getString("gender"), gender);
 		Assert.assertEquals(response.jsonPath().getString("status"), status);
 		Assert.assertNotNull(response.jsonPath().getString("id"));
+		Assert.assertNotNull(response.jsonPath().getString("email"), email);
 		
 		LOG.info("Sending JSON: " + userJson);
 	}

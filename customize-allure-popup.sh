@@ -39,7 +39,7 @@ print_error() {
 # Function to check if required files exist
 check_prerequisites() {
     print_status "Checking prerequisites..."
-	    
+    
     if [ ! -d "$ALLURE_RESULTS_DIR" ]; then
         print_error "Directory $ALLURE_RESULTS_DIR not found!"
         exit 1
@@ -67,7 +67,7 @@ create_custom_template() {
 <html dir="ltr" lang="en">
 <head>
     <meta charset="utf-8">
-    <title>AS-Tech-Allure Report</title>
+    <title>CAPCO TAF - Allure Report</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <link rel="stylesheet" type="text/css" href="plugin/screen-diff/styles.css">
@@ -117,7 +117,7 @@ create_custom_template() {
             let node;
             while (node = walker.nextNode()) {
                 if (node.textContent.includes('ALLURE REPORT') || node.textContent.includes('Allure Report')) {
-                    node.textContent = `Execution-Report | ${currentDate}`;
+                    node.textContent = `CIT-Execution-Report | ${currentDate}`;
                 }
             }
         }
@@ -142,7 +142,7 @@ create_custom_template() {
             else if (passRate >= 80) message.innerHTML = '👏 GREAT JOB! ' + passRate + '% TESTS PASSED! 👏';
             else message.innerHTML = '✨ GOOD WORK! ' + passRate + '% TESTS PASSED! ✨';
             document.body.appendChild(message);
-            for (let i = 0; i < 500; i++) setTimeout(() => createConfetti(), i * 15);
+            for (let i = 0; i < 400; i++) setTimeout(() => createConfetti(), i * 15);
             setTimeout(() => createFirework(200, 200), 500);
             setTimeout(() => createFirework(window.innerWidth - 200, 300), 1000);
             setTimeout(() => createFirework(window.innerWidth / 2, 250), 1500);
