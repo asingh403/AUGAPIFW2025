@@ -174,7 +174,7 @@ public class CreateUserTest extends BaseTest {
 		Assert.assertEquals(response.jsonPath().getString("status"), status);
 		Assert.assertNotNull(response.jsonPath().getString("id"));
 		Assert.assertNotNull(response.jsonPath().getString("email"), email);
-		
+		LOG.info("user request email : "+ email);
 		LOG.info("Sending JSON: " + userJson);
 	}
 
