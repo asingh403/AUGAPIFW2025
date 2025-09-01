@@ -5,11 +5,6 @@ pipeline {
       maven 'Maven'
    }
    
-   environment {
-      DOCKER_IMAGE = "naveenkhunteta/jan2025apiframework:${BUILD_NUMBER}"
-      DOCKER_CREDENTIALS_ID = 'dockerhub_credentials'
-   }
-   
    stages {
       stage('Checkout Code') {
          steps {
@@ -23,16 +18,12 @@ pipeline {
          }
       }
       
-      
       stage('Run Sanity Tests on Dev') {
          steps {
             script {
                def status = sh(
-               script: """
-               docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
-               mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml -Denv=prod
-               """,
-               returnStatus: true
+                  script: "mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml -Denv=prod",
+                  returnStatus: true
                )
                if (status != 0) {
                   currentBuild.result = 'UNSTABLE'
@@ -40,7 +31,6 @@ pipeline {
             }
          }
       }
-      
       
       stage('Deploy to QA') {
          steps {
@@ -52,11 +42,8 @@ pipeline {
          steps {
             script {
                def status = sh(
-               script: """
-               docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
-               mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml -Denv=prod
-               """,
-               returnStatus: true
+                  script: "mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/gorest.xml",
+                  returnStatus: true
                )
                if (status != 0) {
                   currentBuild.result = 'UNSTABLE'
@@ -68,11 +55,11 @@ pipeline {
       stage('Publish Allure Reports') {
          steps {
             allure([
-            includeProperties: false,
-            jdk: '',
-            properties: [],
-            reportBuildPolicy: 'ALWAYS',
-            results: [[path: 'target/allure-results']]
+               includeProperties: false,
+               jdk: '',
+               properties: [],
+               reportBuildPolicy: 'ALWAYS',
+               results: [[path: 'target/allure-results']]
             ])
          }
       }
@@ -87,11 +74,8 @@ pipeline {
          steps {
             script {
                def status = sh(
-               script: """
-               docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
-               mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml -Denv=prod
-               """,
-               returnStatus: true
+                  script: "mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml -Denv=prod",
+                  returnStatus: true
                )
                if (status != 0) {
                   currentBuild.result = 'UNSTABLE'
@@ -103,13 +87,13 @@ pipeline {
       stage('Publish Sanity ChainTest Report') {
          steps {
             publishHTML([
-            allowMissing: false,
-            alwaysLinkToLastBuild: false,
-            keepAll: true,
-            reportDir: 'target/chaintest',
-            reportFiles: 'Index.html',
-            reportName: 'HTML API Sanity ChainTest Report',
-            reportTitles: ''
+               allowMissing: false,
+               alwaysLinkToLastBuild: false,
+               keepAll: true,
+               reportDir: 'target/chaintest',
+               reportFiles: 'Index.html',
+               reportName: 'HTML API Sanity ChainTest Report',
+               reportTitles: ''
             ])
          }
       }
@@ -124,11 +108,8 @@ pipeline {
          steps {
             script {
                def status = sh(
-               script: """
-               docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
-               mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml -Denv=prod
-               """,
-               returnStatus: true
+                  script: "mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml -Denv=prod",
+                  returnStatus: true
                )
                if (status != 0) {
                   currentBuild.result = 'UNSTABLE'
