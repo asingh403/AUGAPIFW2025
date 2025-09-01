@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        jdk 'JDK-17'
-        maven 'Apache Maven 3.9.11'
+        jdk 'Java17'
+        maven 'Maven 3.9.11'
     }
 
     stages {
@@ -19,9 +19,16 @@ pipeline {
             }
         }
         
+        stage('Clean Allure Reports') {
+            steps {
+                sh 'rm -rf target/allure-results/*'
+                sh 'rm -rf allure-report/*'
+            }
+        }
+        
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh 'mvn test -Dsurefire.suiteXmlFiles=gorest.xml'
             }
             post {
                 always {
