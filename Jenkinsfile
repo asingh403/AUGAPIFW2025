@@ -29,7 +29,7 @@ pipeline {
       stage('Test Execution') {
          steps {
             git 'https://github.com/asingh403/AUGAPIFW2025.git'
-            sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/gorest.xml'
+            sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/gorest.xml"
          }
          post {
             always {
