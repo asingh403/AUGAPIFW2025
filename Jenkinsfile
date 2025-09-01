@@ -26,9 +26,10 @@ pipeline {
          }
       }
       
-      stage('Test') {
+      stage('Test Execution') {
          steps {
-            sh 'mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/gorest.xml'
+            git 'https://github.com/asingh403/AUGAPIFW2025.git'
+            sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/gorest.xml'
          }
          post {
             always {
