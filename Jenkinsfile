@@ -15,7 +15,7 @@ pipeline {
 
     stage('Checkout Code') {
             steps {
-                git 'https://github.com/asingh403/AUGAPIFW2025.git'
+                git branch: 'main', url: 'https://github.com/asingh403/AUGAPIFW2025.git'
             }
         }
         stage('Post-Checkout Debug') {
