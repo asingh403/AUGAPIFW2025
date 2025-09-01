@@ -1,30 +1,30 @@
 pipeline {
-   agent any
-   
-   tools {
-      jdk 'Java17'
-      maven 'Maven_3.9.11'
-   }
-   
-   stages {
-      stage('Checkout Code') {
-         steps {
-            git 'https://github.com/asingh403/AUGAPIFW2025.git'
-         }
-      }
-      
-      stage('Build') {
-         steps {
-            sh 'mvn clean compile'
-         }
-      }
-      
-      stage('Clean Allure Reports') {
-         steps {
-            sh 'rm -rf target/allure-results/* || true'
-            sh 'rm -rf allure-report/* || true'
-         }
-      }
+    agent any
+    
+    tools {
+        jdk 'Java17'
+        maven 'Maven_3.9.11'
+    }
+    
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/asingh403/AUGAPIFW2025.git'
+            }
+        }
+        
+        stage('Debug Config') {
+            steps {
+                sh 'find . -name "*.properties" -exec echo "=== {} ===" \\; -exec cat {} \\;'
+                sh 'grep -r "bearertoken" . || true'
+            }
+        }
+        
+        stage('Verify Config') {
+            steps {
+                sh 'cat src/test/resources/config.properties || cat config.properties || echo "Config file not found"'
+            }
+        }
       
       stage('Test Execution') {
          steps {
