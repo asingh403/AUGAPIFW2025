@@ -12,15 +12,22 @@ pipeline {
                 deleteDir()  // Clean workspace completely
             }
         }
-        
-        stage('Checkout Code') {
+
+    stage('Checkout Code') {
             steps {
                 git 'https://github.com/asingh403/AUGAPIFW2025.git'
             }
         }
-        
-        stage('Debug Config') {
-            steps {
+    stage('Debug Workspace') {
+        steps {
+            sh 'pwd'
+            sh 'ls -la'
+            sh 'java -version'
+            sh 'mvn -version'
+    }
+}
+    stage('Debug Config') {
+        steps {
                 sh 'find . -name "*.properties" -exec echo "=== {} ===" \\; -exec cat {} \\;'
                 sh 'grep -r "bearertoken" . || true'
             }
