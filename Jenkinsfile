@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clean Workspace') {
             steps {
-                deleteDir()  // Clean workspace completely
+                deleteDir()
             }
         }
 
@@ -18,6 +18,17 @@ pipeline {
                 git 'https://github.com/asingh403/AUGAPIFW2025.git'
             }
         }
+        stage('Post-Checkout Debug') {
+    steps {
+        sh 'echo "=== DEBUGGING POST CHECKOUT ==="'
+        sh 'pwd'
+        sh 'ls -la'
+        sh 'echo "Java check:"'
+        sh 'java -version || echo "Java not found"'
+        sh 'echo "Maven check:"'
+        sh 'mvn -version || echo "Maven not found"'
+    }
+}
     stage('Debug Workspace') {
         steps {
             sh 'pwd'
