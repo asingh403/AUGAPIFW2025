@@ -7,6 +7,12 @@ pipeline {
     }
     
     stages {
+        stage('Clean Workspace') {
+            steps {
+                deleteDir()  // Clean workspace completely
+            }
+        }
+        
         stage('Checkout Code') {
             steps {
                 git 'https://github.com/asingh403/AUGAPIFW2025.git'
@@ -19,34 +25,27 @@ pipeline {
                 sh 'grep -r "bearertoken" . || true'
             }
         }
-        
-        stage('Verify Config') {
+      
+        stage('Test Execution') {
             steps {
-                sh 'cat src/test/resources/config.properties || cat config.properties || echo "Config file not found"'
+                sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/gorest.xml"
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
+                }
             }
         }
       
-      stage('Test Execution') {
-         steps {
-            git 'https://github.com/asingh403/AUGAPIFW2025.git'
-            sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/gorest.xml"
-         }
-         post {
-            always {
-               junit '**/target/surefire-reports/*.xml'
+        stage('Publish Allure Reports') {
+            steps {
+                allure([
+                    includeProperties: false,
+                    properties: [],
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: 'target/allure-results']]
+                ])
             }
-         }
-      }
-      
-      stage('Publish Allure Reports') {
-         steps {
-            allure([
-            includeProperties: false,
-            properties: [],
-            reportBuildPolicy: 'ALWAYS',
-            results: [[path: 'target/allure-results']]
-            ])
-         }
-      }
-   }
+        }
+    }
 }
