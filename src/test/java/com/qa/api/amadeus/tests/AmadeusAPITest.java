@@ -51,7 +51,7 @@ public class AmadeusAPITest extends BaseTest {
 				throw new RuntimeException("OAuth failed with status: " + postResponse.getStatusCode());
 			}
 
-			String accessToken = postResponse.jsonPath().getString("access_token");
+			accessToken = postResponse.jsonPath().getString("access_token");
 			LOG.info("Access Token === " + accessToken);
 
 			if (accessToken == null || accessToken.isEmpty()) {
