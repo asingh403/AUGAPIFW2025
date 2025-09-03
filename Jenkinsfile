@@ -18,6 +18,20 @@ pipeline {
             git branch: 'main', url: 'https://github.com/asingh403/AUGAPIFW2025.git'
          }
       }
+      stage('SonarQube Analysis') {
+         steps {
+            withSonarQubeEnv('MySonarQubeServer') {
+               sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=AUGAPIFW2025 -Dsonar.projectName=AUGAPIFW2025'
+            }
+         }
+      }
+      stage('Quality Gate') {
+         steps {
+            timeout(time: 1, unit: 'MINUTES') {
+               waitForQualityGate abortPipeline: true
+            }
+         }
+      }
       
       stage('Post-Checkout Debug') {
          steps {
@@ -30,7 +44,11 @@ pipeline {
       
       stage('Debug Config') {
          steps {
-            sh 'find . -name "*.properties" -exec echo "=== {} ===" \\; -exec cat {} \\;'
+            sh 'find . -name "*.properties" -exec echo "=== {
+            }
+            ===" \\; -exec cat {
+            }
+            \\;'
             sh 'grep -r "bearertoken" . || true'
          }
       }
@@ -49,10 +67,10 @@ pipeline {
       stage('Publish Allure Reports') {
          steps {
             allure([
-               includeProperties: false,
-               properties: [],
-               reportBuildPolicy: 'ALWAYS',
-               results: [[path: 'target/allure-results']]
+            includeProperties: false,
+            properties: [],
+            reportBuildPolicy: 'ALWAYS',
+            results: [[path: 'target/allure-results']]
             ])
          }
       }
