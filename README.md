@@ -128,4 +128,5 @@ graph TB
 ## Custom Test Report HTML added | Instead of 'Allure' Logo Showing "CAPCO" logo in the report with Confetti Style Animation
 <img   width="600"   height="400"   alt="image"   src="https://github.com/user-attachments/assets/849a838c-5ff6-4c21-bbc9-d93f1f8a9a30" />
 
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Post-blue?logo=linkedin)](https://www.linkedin.com/feed/update/urn:li:share:7365859054805524482)
 
