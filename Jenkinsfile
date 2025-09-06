@@ -42,16 +42,13 @@ pipeline {
          }
       }
       
-      stage('Debug Config') {
+stage('Debug Config') {
     steps {
-        sh '''
-            find . -name "*.properties" \
-              -exec echo "=== {} ===" \; \
-              -exec cat {} \;
-        '''
+        sh 'find . -name "*.properties" -exec echo "=== {} ===" \\; -exec cat {} \\;'
         sh 'grep -r "bearertoken" . || true'
     }
 }
+
 
       
       stage('Test Execution') {
