@@ -130,3 +130,110 @@ graph TB
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Post-blue?logo=linkedin)](https://www.linkedin.com/feed/update/urn:li:share:7365859054805524482)
 
+## Added sonar coverage in local run
+Test Coverage Pipeline: Test execution → Coverage data generation → XML report creation → SonarQube analysis
+
+# Scanner reads configuration
+TestNG → JaCoCo → Maven Surefire → SonarQube Scanner → SonarQube Server → Dashboard
+
+## Added sonar coverage in local run
+Test Coverage Pipeline: Test execution → Coverage data generation → XML report creation → SonarQube analysis
+# Scanner reads configuration
+TestNG → JaCoCo → Maven Surefire → SonarQube Scanner → SonarQube Server → Dashboard
+```
+Step 1: TestNG Test Execution
+TestNG Framework
+├── Reads: testng_regression.xml
+├── Discovers: @Test annotated methods
+├── Executes: API test cases (AmadeusAPITest.getOAuth2Token)
+├── Handles: Test retries, parallel execution
+└── Generates: Test results in memory
+
+Step 2: JaCoCo Code Coverage Agent
+JaCoCo Agent (prepare-agent goal)
+├── Instruments: Java bytecode during test execution
+├── Tracks: Which lines/branches executed
+├── Records: Coverage data in binary format
+└── Outputs: target/jacoco.exec file
+
+Step 3: Maven Surefire Plugin
+Surefire Plugin
+├── Orchestrates: TestNG test execution
+├── Captures: Test results (pass/fail/skip)
+├── Generates: XML reports per test class
+└── Outputs: target/surefire-reports/*.xml files
+
+Step 5: SonarQube Scanner Analysis
+SonarQube Scanner
+├── Reads: sonar-project.properties configuration
+├── Processes: Source code and test reports
+├── Analyzes: Coverage XML (jacoco.xml)
+└── Sends: Analysis data to SonarQube server
+
+Step 6: SonarQube Server Processing
+SonarQube Server
+├── Receives: Analysis data from scanner
+├── Stores: Metrics in database
+├── Processes: Quality gate evaluation
+├── Generates: Historical trend data
+└── Updates: Web dashboard with results
+
+Step 7: Dashboard Visualization
+SonarQube Dashboard
+├── Displays: Test coverage (43.1%)
+├── Shows: Unit test count (20 tests)
+├── Lists: Code quality issues (3 bugs, 42 code smells)
+├── Presents: Security analysis (4 hotspots)
+└── Provides: Actionable remediation guidance
+```
+
+## Data Flow Diagram
+<img width="452" height="858" alt="image" src="https://github.com/user-attachments/assets/1e92b61c-6c06-4718-ad74-0e18e56471f5" />
+
+## Command Sequence
+
+### Phase 1: Test Execution with Coverage
+
+# Step 1: Run tests with JaCoCo instrumentation
+mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_regression.xml
+
+# Step 2: Generate JaCoCo XML report
+mvn jacoco:report
+
+# Step 3: Run SonarQube analysis
+docker run --rm --network host -v "$(pwd):/usr/src" sonarsource/sonar-scanner-cli
+
+```
+File Dependencies
+Configuration Files:
+├── pom.xml (Maven + JaCoCo + Surefire plugins)
+├── testng_regression.xml (Test suite definition)
+└── sonar-project.properties (SonarQube configuration)
+
+Generated Reports:
+├── target/jacoco.exec (Binary coverage data)
+├── target/site/jacoco/jacoco.xml (Coverage XML)
+├── target/surefire-reports/*.xml (Test results)
+└── SonarQube Dashboard (Final visualization)
+```
+
+## Key Integration Points
+JaCoCo ↔ TestNG:
+
+# JaCoCo agent instruments code before TestNG execution
+Coverage tracking happens transparently during test runs
+
+JaCoCo ↔ SonarQube:
+
+# SonarQube reads JaCoCo XML reports for coverage metrics
+Correlates coverage with static analysis findings
+
+Surefire ↔ SonarQube:
+
+# SonarQube imports test execution results
+Shows test count, success rate, execution time
+
+**Result:** Comprehensive test automation reporting with **43.1%** coverage visibility and quality metrics in your SonarQube dashboard.
+<img width="1191" height="1018" alt="image" src="https://github.com/user-attachments/assets/2d8ca7b9-01b3-4343-8b40-ba8394a75bda" />
+
+
