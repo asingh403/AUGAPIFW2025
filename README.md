@@ -239,4 +239,6 @@ Shows test count, success rate, execution time
 
 <img width="1191" height="1018" alt="image" src="https://github.com/user-attachments/assets/2d8ca7b9-01b3-4343-8b40-ba8394a75bda" />
 
+### How Sonar Works | Confluence Page
+https://learn-asingh.atlassian.net/wiki/x/AgDMAQ
 
