@@ -10,7 +10,9 @@ public class StringUtils {
 	}
 
 	public static String getRandomName() {
-		return "TEST" + "_" + new Random().ints(8, 0, 26).mapToObj(i -> String.valueOf((char) ('a' + i)))
+		return "test" + "_" + new Random().ints(8, 0, 26)
+				.mapToObj(i -> String.valueOf(
+				(char) ('a' + i)))
 				.collect(Collectors.joining());
 	}
 
