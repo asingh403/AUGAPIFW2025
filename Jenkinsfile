@@ -51,16 +51,16 @@ stage('Debug Config') {
 
 
       
-      stage('Test Execution') {
-         steps {
-            sh 'mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/gorest.xml'
-         }
-         post {
-            always {
-               junit '**/target/surefire-reports/*.xml'
-            }
-         }
+stage('Test Execution') {
+   steps {
+      sh 'mvn test -DsuiteXmlFile=src/test/resources/testrunners/gorest.xml'
+   }
+   post {
+      always {
+         junit '**/target/surefire-reports/*.xml'
       }
+   }
+}
       
       stage('Publish Allure Reports') {
          steps {
