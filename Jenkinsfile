@@ -53,7 +53,7 @@ stage('Debug Config') {
       
       stage('Test Execution') {
          steps {
-            sh 'mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/gorest.xml || true'
+            sh 'mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/gorest.xml'
          }
          post {
             always {
