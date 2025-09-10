@@ -19,12 +19,12 @@ pipeline {
          }
       }
       stage('SonarQube Analysis') {
-         steps {
-            withSonarQubeEnv('MySonarQubeServer') {
-               sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=AUGAPIFW2025 -Dsonar.projectName=AUGAPIFW2025'
-            }
-         }
+   steps {
+      withSonarQubeEnv('MySonarQubeServer') {
+         sh 'mvn clean compile sonar:sonar -Dsonar.projectKey=AUGAPIFW2025 -Dsonar.projectName=AUGAPIFW2025'
       }
+   }
+}
       stage('Quality Gate') {
          steps {
             timeout(time: 1, unit: 'MINUTES') {
