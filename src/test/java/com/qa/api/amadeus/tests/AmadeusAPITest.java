@@ -153,6 +153,7 @@ public class AmadeusAPITest extends BaseTest {
 			System.out.printf("  SubType: %s%n", locationData.get("subType"));
 			System.out.printf("  Detailed Name: %s%n", locationData.get("detailedName"));
 			System.out.println();
+			LOG.info("==== {}, {}, {}", code, locationData.get("subtype"));
 		});
 	}
 
