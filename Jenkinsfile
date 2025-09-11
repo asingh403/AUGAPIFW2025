@@ -37,7 +37,8 @@ pipeline {
       
       stage('Test Execution with Coverage') {
          steps {
-            sh 'mvn test jacoco:report -DsuiteXmlFile=src/test/resources/testrunners/gorest.xml'
+            sh 'mvn test jacoco:report -DsuiteXmlFile=src/test/resources/testrunners/testng_regression.xml'
+          //sh 'mvn test jacoco:report -DsuiteXmlFile=src/test/resources/testrunners/gorest.xml'
          }
          post {
             always {
