@@ -18,20 +18,6 @@ pipeline {
             git branch: 'main', url: 'https://github.com/asingh403/AUGAPIFW2025.git'
          }
       }
-      stage('SonarQube Analysis') {
-   steps {
-      withSonarQubeEnv('SonarQubeServer') {
-         sh 'mvn clean compile sonar:sonar -Dsonar.projectKey=AUGAPIFW2025'
-      }
-   }
-}
-      stage('Quality Gate') {
-         steps {
-            timeout(time: 15, unit: 'MINUTES') {
-               waitForQualityGate abortPipeline: false
-            }
-         }
-      }
       
       stage('Post-Checkout Debug') {
          steps {
@@ -42,33 +28,47 @@ pipeline {
          }
       }
       
-stage('Debug Config') {
-    steps {
-        sh 'find . -name "*.properties" -exec echo "=== {} ===" \\; -exec cat {} \\;'
-        sh 'grep -r "bearertoken" . || true'
-    }
-}
-
-
-      
-stage('Test Execution with Coverage') {
-   steps {
-      sh 'mvn test jacoco:report -DsuiteXmlFile=src/test/resources/testrunners/gorest.xml'
-   }
-   post {
-      always {
-         junit '**/target/surefire-reports/*.xml'
+      stage('Debug Config') {
+         steps {
+            sh 'find . -name "*.properties" -exec echo "=== {} ===" \\; -exec cat {} \\;'
+            sh 'grep -r "bearertoken" . || true'
+         }
       }
-   }
-}
+      
+      stage('Test Execution with Coverage') {
+         steps {
+            sh 'mvn test jacoco:report -DsuiteXmlFile=src/test/resources/testrunners/gorest.xml'
+         }
+         post {
+            always {
+               junit '**/target/surefire-reports/*.xml'
+            }
+         }
+      }
+      
+      stage('SonarQube Analysis') {
+         steps {
+            withSonarQubeEnv('SonarQubeServer') {
+               sh 'mvn sonar:sonar'
+            }
+         }
+      }
+      
+      stage('Quality Gate') {
+         steps {
+            timeout(time: 15, unit: 'MINUTES') {
+               waitForQualityGate abortPipeline: true
+            }
+         }
+      }
       
       stage('Publish Allure Reports') {
          steps {
             allure([
-            includeProperties: false,
-            properties: [],
-            reportBuildPolicy: 'ALWAYS',
-            results: [[path: 'target/allure-results']]
+               includeProperties: false,
+               properties: [],
+               reportBuildPolicy: 'ALWAYS',
+               results: [[path: 'target/allure-results']]
             ])
          }
       }
