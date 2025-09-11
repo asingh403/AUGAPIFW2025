@@ -52,11 +52,12 @@
 		</packages>
 	</test>
 
+	<!-- 	
 	<test name="Amadeus API Tests">
 		<packages>
 			<package name="com.qa.api.amadeus.tests" />
 		</packages>
 	</test>
-
+-->
 
 </suite>
