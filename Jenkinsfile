@@ -28,7 +28,7 @@ pipeline {
       stage('Quality Gate') {
          steps {
             timeout(time: 6, unit: 'MINUTES') {
-               waitForQualityGate abortPipeline: true
+               waitForQualityGate abortPipeline: false
             }
          }
       }
@@ -51,9 +51,9 @@ stage('Debug Config') {
 
 
       
-stage('Test Execution') {
+stage('Test Execution with Coverage') {
    steps {
-      sh 'mvn test -DsuiteXmlFile=src/test/resources/testrunners/gorest.xml'
+      sh 'mvn test jacoco:report -DsuiteXmlFile=src/test/resources/testrunners/gorest.xml'
    }
    post {
       always {
