@@ -46,13 +46,13 @@ pipeline {
          }
       }
       
-      stage('SonarQube Analysis') {
-         steps {
-            withSonarQubeEnv('SonarQubeServer') {
-               sh 'mvn sonar:sonar'
-            }
-         }
-      }
+	  stage('SonarQube Analysis') {
+   		 steps {
+      		withSonarQubeEnv('SonarQubeServer') {
+         	sh 'mvn sonar:sonar'
+      		}
+   		 }
+	  }
       
       stage('Quality Gate') {
          steps {
