@@ -22,7 +22,7 @@ pipeline {
    steps {
       withSonarQubeEnv('MySonarQubeServer') {
          // sh 'mvn clean compile sonar:sonar -Dsonar.projectKey=AUGAPIFW2025 -Dsonar.projectName=AUGAPIFW2025'
-         sh 'mvn clean compile sonar:sonar'
+         sh 'mvn clean compile sonar:sonar -Dsonar.projectKey=my-api-taf'
       }
    }
 }
