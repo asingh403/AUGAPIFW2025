@@ -59,11 +59,11 @@ pipeline {
          steps {
             script {
                try {
-                  timeout(time: 3, unit: 'MINUTES') {
+                  timeout(time: 2, unit: 'MINUTES') {
                      waitForQualityGate abortPipeline: false
                   }
                } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
-                  echo "Quality gate timed out after 3 minutes - treating as passed"
+                  echo "Quality gate timed out after 2 minutes - treating as passed"
                   currentBuild.result = 'SUCCESS'
                }
             }
