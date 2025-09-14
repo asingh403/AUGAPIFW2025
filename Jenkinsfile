@@ -63,7 +63,7 @@ pipeline {
                      waitForQualityGate abortPipeline: false
                   }
                } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
-                  echo "Quality gate timed out after 2 minutes - treating as passed"
+                  echo "Quality gate timed out after 2 minutes - treated as passed"
                   currentBuild.result = 'SUCCESS'
                }
             }
